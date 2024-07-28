@@ -1,0 +1,72 @@
+.detail {
+  flex: 1;
+  overflow: scroll;
+
+  .user {
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 1px solid #dddddd35;
+
+    img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+
+  .info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .option {
+      .title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        img {
+          width: 30px;
+          height: 30px;
+          background-color: rgba(17, 25, 40, 0.3);
+          padding: 10px;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #f21818;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+
+    &:hover {
+      background-color: #e52e16;
+    }
+  }
+  .logout {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: rgba(0, 68, 255, 0.849);
+
+    &:hover {
+      background-color: rgba(0, 68, 255, 0.849);
+    }
+  }
+}
+
+
+.detail::-webkit-scrollbar {
+  display: none;
+}

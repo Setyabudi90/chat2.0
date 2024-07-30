@@ -1,8 +1,7 @@
 import AddUser from "../addUser/AddUser";
 import "./chatList.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useUserStore } from "../../../libs/useStore";
-import { useEffect } from "react";
 import { doc, onSnapshot, getDoc } from "firebase/firestore";
 import { db } from "../../../libs/firebase";
 import { chatStore } from "../../../libs/chatStore";
@@ -10,9 +9,13 @@ import { updateDoc } from "firebase/firestore";
 
 const ChatList = () => {
   const [chats, setChats] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [mode, setAddMode] = useState(false);
   const { currentUser } = useUserStore();
   const { chatId, changeChat } = chatStore();
+  
+  // Salinan asli daftar chats
+  const [originalChats, setOriginalChats] = useState([]);
 
   useEffect(() => {
     if (!currentUser.id) return;
@@ -41,6 +44,7 @@ const ChatList = () => {
 
         const results = await Promise.all(promises);
         setChats(results.sort((a, b) => b.updateAt - a.updateAt));
+        setOriginalChats(results);
       }
     );
 
@@ -71,12 +75,38 @@ const ChatList = () => {
     }
   };
 
+  const validateLastMessage = (message) => {
+    if (message.length > 26) {
+      return message.slice(0, 26) + "...";
+    }
+    return message;
+  };
+
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query.length === 0 || query.trim() === "") {
+      setChats(originalChats);
+    } else {
+      const filtered = originalChats.filter(chat => chat.user.username.includes(query));
+      setChats(filtered);
+    }
+  };
+
   return (
     <div className="chatList">
       <div className="search">
         <div className="searchBar">
-          <img src="/search.png" alt="Pencarian" />
-          <input type="search" placeholder="Cari..." aria-label="Cari" />
+          <img src="/search.png" alt="Pencarian" onClick={handleSearch} />
+          <input
+            type="search"
+            placeholder="Cari..."
+            onInput={handleSearch}
+            onChange={handleSearch}
+            value={searchQuery}
+            aria-label="Cari"
+          />
         </div>
         <img
           src={mode ? "/minus.png" : "/plus.png"}
@@ -105,7 +135,7 @@ const ChatList = () => {
             />
             <div className="texts">
               <span>{chat?.user.username}</span>
-              <p>{chat.lastMessage}</p>
+              <p>{validateLastMessage(chat?.lastMessage)}</p>
             </div>
           </div>
         );

@@ -1,11 +1,16 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./chat.css";
 import EmojiPicker from "emoji-picker-react";
-import { useEffect } from "react";
-import { arrayUnion, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
+import {
+  arrayUnion,
+  doc,
+  onSnapshot,
+  updateDoc,
+  getDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db } from "../../libs/firebase";
 import { chatStore } from "../../libs/chatStore";
-import { doc } from "firebase/firestore";
 import { useUserStore } from "../../libs/useStore";
 import Tambah from "../../libs/upload";
 
@@ -17,21 +22,25 @@ const Chat = () => {
     file: null,
     url: "",
   });
+  const [userStatus, setUserStatus] = useState("Offline");
 
   const endRef = useRef(null);
 
   const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } = chatStore();
   const { currentUser } = useUserStore();
+
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, []);
+  }, [chat]);
 
   useEffect(() => {
-    const unSub = onSnapshot(doc(db, "chats", chatId), (response) => {
-      setChat(response.data());
-    });
+    if (chatId) {
+      const unSub = onSnapshot(doc(db, "chats", chatId), (response) => {
+        setChat(response.data());
+      });
 
-    return () => unSub();
+      return () => unSub();
+    }
   }, [chatId]);
 
   const handleImg = (e) => {
@@ -44,7 +53,7 @@ const Chat = () => {
   };
 
   const clickedEmoji = (event) => {
-    setText((prev) => prev + event?.emoji);
+    setText((prev) => prev + event.emoji);
     setOpen(false);
   };
 
@@ -97,14 +106,34 @@ const Chat = () => {
 
     setText("");
   };
+
+  const Times = (times) => {
+    let date = new Date(times.seconds * 1000);
+    date.setMilliseconds(date.getMilliseconds() + times.nanoseconds / 1000000);
+
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const secondsPart = date.getSeconds();
+
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+
+    const timeString = `${String(hours).padStart(2, "0")}:${String(
+      minutes
+    ).padStart(2, "0")}:${String(secondsPart).padStart(2, "0")} ${ampm}`;
+
+    return timeString;
+  }
+
   return (
     <div className="chat">
       <div className="top">
         <div className="user">
-          <img src={user?.imgURL ||"/default-avatar.jpg"} alt="avatar" />
+          <img src={user?.imgURL || "/default-avatar.jpg"} alt="avatar" />
           <div className="texts">
             <h2>{user?.username}</h2>
-            <p>Offline</p>
+            <p>{userStatus}</p>
           </div>
         </div>
         <div className="icons">
@@ -114,23 +143,21 @@ const Chat = () => {
         </div>
       </div>
       <div className="center">
-        {chat?.messages?.map((message) => (
-          <>
-            <div
-              className={
-                message?.senderId === currentUser.id ? "message own" : "message"
-              }
-              key={message?.createdAt}
-            >
-              <div className="texts">
-                {message.img && (
-                  <img src={message.img} alt="img" className="ownImg" />
-                )}
-                <p>{message.text}</p>
-                {/* <span>{message.createdAt}</span> */}
-              </div>
+        {chat?.messages?.map((message, index) => (
+          <div
+            className={
+              message?.senderId === currentUser.id ? "message own" : "message"
+            }
+            key={index}
+          >
+            <div className="texts">
+              {message.img && (
+                <img src={message.img} alt="img" className="ownImg" />
+              )}
+              <p>{message.text}</p>
+              <span>{Times(message?.createdAt)}</span>
             </div>
-          </>
+          </div>
         ))}
         {img.url && (
           <div className="message own">
@@ -157,7 +184,11 @@ const Chat = () => {
         </div>
         <input
           type="text"
-          placeholder={isCurrentUserBlocked || isReceiverBlocked ? "You can't send a message.." : "Type a Message..."}
+          placeholder={
+            isCurrentUserBlocked || isReceiverBlocked
+              ? "You can't send a message.."
+              : "Type a Message..."
+          }
           value={text}
           onChange={(e) => setText(e.target.value)}
           disabled={isCurrentUserBlocked || isReceiverBlocked}
@@ -172,7 +203,11 @@ const Chat = () => {
             <EmojiPicker open={open} onEmojiClick={clickedEmoji} />
           </div>
         </div>
-        <button className="sendButton" onClick={handleSend} disabled={isCurrentUserBlocked || isReceiverBlocked}>
+        <button
+          className="sendButton"
+          onClick={handleSend}
+          disabled={isCurrentUserBlocked || isReceiverBlocked}
+        >
           Send
         </button>
       </div>

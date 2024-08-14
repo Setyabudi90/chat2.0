@@ -7,12 +7,14 @@ import {
   onSnapshot,
   updateDoc,
   getDoc,
-  serverTimestamp,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "../../libs/firebase";
 import { chatStore } from "../../libs/chatStore";
 import { useUserStore } from "../../libs/useStore";
 import Tambah from "../../libs/upload";
+import { toast } from "react-toastify";
+import { update } from "firebase/database";
 
 const Chat = () => {
   const [open, setOpen] = useState(false);
@@ -107,6 +109,39 @@ const Chat = () => {
     setText("");
   };
 
+  useEffect(() => {
+    const userRef = doc(db, "users", currentUser.id);
+    const setUserOnline = async () => {
+      await updateDoc(userRef, { online: true });
+    };
+
+    const setUserOffline = async () => {
+      await updateDoc(userRef, { online: false });
+    };
+
+    setUserOnline();
+
+    window.addEventListener("beforeunload", setUserOffline);
+    window.addEventListener("pagehide", setUserOffline);
+
+    return () => {
+      setUserOffline();
+      window.removeEventListener("beforeunload", setUserOffline);
+    };
+  }, [currentUser.id]);
+
+  useEffect(() => {
+    if (user?.id) {
+      const userRef = doc(db, "users", user?.id);
+      const unSub = onSnapshot(userRef, (doc) => {
+        if (doc.exists()) {
+          setUserStatus(doc.data().online ? "Online" : "Offline");
+        }
+      });
+      return () => unSub();
+    }
+  }, [user?.id]);
+
   const Times = (times) => {
     let date = new Date(times.seconds * 1000);
     date.setMilliseconds(date.getMilliseconds() + times.nanoseconds / 1000000);
@@ -124,7 +159,7 @@ const Chat = () => {
     ).padStart(2, "0")}:${String(secondsPart).padStart(2, "0")} ${ampm}`;
 
     return timeString;
-  }
+  };
 
   return (
     <div className="chat">
@@ -132,8 +167,24 @@ const Chat = () => {
         <div className="user">
           <img src={user?.imgURL || "/default-avatar.jpg"} alt="avatar" />
           <div className="texts">
-            <h2>{user?.username}</h2>
-            <p>{userStatus}</p>
+            <h2>
+              {user?.username}
+              {user?.isVerified && (
+                <img
+                  className="verified"
+                  title="verified"
+                  src="/verified.png"
+                  alt="verified"
+                />
+              )}
+            </h2>
+            <p>
+              {user?.isVerified && !isReceiverBlocked
+                ? "Admin Account"
+                : isCurrentUserBlocked || isReceiverBlocked
+                ? null
+                : userStatus}
+            </p>
           </div>
         </div>
         <div className="icons">
@@ -152,7 +203,12 @@ const Chat = () => {
           >
             <div className="texts">
               {message.img && (
-                <img src={message.img} alt="img" className="ownImg" />
+                <img
+                  src={message.img}
+                  srcSet={message.img}
+                  alt="img"
+                  className="ownImg"
+                />
               )}
               <p>{message.text}</p>
               <span>{Times(message?.createdAt)}</span>
@@ -190,6 +246,7 @@ const Chat = () => {
               : "Type a Message..."
           }
           value={text}
+          onKeyDown={(e) => e.key === "Enter" && handleSend()}
           onChange={(e) => setText(e.target.value)}
           disabled={isCurrentUserBlocked || isReceiverBlocked}
         />
@@ -197,10 +254,16 @@ const Chat = () => {
           <img
             src="/emoji.png"
             alt="emoji"
-            onClick={() => setOpen((prev) => !prev)}
+            onClick={() =>
+              setOpen((prev) =>
+                isCurrentUserBlocked || isReceiverBlocked ? prev : !prev
+              )
+            }
           />
           <div className="picker">
-            <EmojiPicker open={open} onEmojiClick={clickedEmoji} />
+            {isCurrentUserBlocked || isReceiverBlocked ? null : (
+              <EmojiPicker open={open} onEmojiClick={clickedEmoji} />
+            )}
           </div>
         </div>
         <button

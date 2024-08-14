@@ -3,6 +3,7 @@ import { useUserStore } from "../../libs/useStore";
 import { arrayRemove, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { chatStore } from "../../libs/chatStore";
 import "./detail.css";
+import { toast } from "react-toastify";
 
 const Detail = () => {
   const { chatdId, user, isCurrentUserBlocked, isReceiverBlocked, changeBlock } = chatStore();
@@ -19,6 +20,7 @@ const Detail = () => {
       changeBlock();
     } catch (error) {
       console.error("Error updating block status: ", error);
+      toast.error(error.message);
     }
   };
 
@@ -27,7 +29,7 @@ const Detail = () => {
       <div className="user">
         <img src={user?.imgURL || "/default-avatar.jpg"} alt="avatar" />
         <h2>{user?.username}</h2>
-        <p>Lorem ipsum dolor sit.</p>
+        <p>Hey there, I'am using Chats</p>
       </div>
       <div className="info">
         <div className="option">

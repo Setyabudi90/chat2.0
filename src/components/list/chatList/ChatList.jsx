@@ -13,7 +13,7 @@ const ChatList = () => {
   const [mode, setAddMode] = useState(false);
   const { currentUser } = useUserStore();
   const { chatId, changeChat } = chatStore();
-  
+
   // Salinan asli daftar chats
   const [originalChats, setOriginalChats] = useState([]);
 
@@ -89,7 +89,9 @@ const ChatList = () => {
     if (query.length === 0 || query.trim() === "") {
       setChats(originalChats);
     } else {
-      const filtered = originalChats.filter(chat => chat.user.username.includes(query));
+      const filtered = originalChats.filter((chat) =>
+        chat.user.username.includes(query)
+      );
       setChats(filtered);
     }
   };
@@ -134,7 +136,17 @@ const ChatList = () => {
               alt="avatar"
             />
             <div className="texts">
-              <span>{chat?.user.username}</span>
+              <span>
+                {chat?.user.username}
+                {chat?.user.isVerified && (
+                  <img
+                    className="verified"
+                    title="verified"
+                    src="/verified.png"
+                    alt="verified"
+                  />
+                )}
+              </span>
               <p>{validateLastMessage(chat?.lastMessage)}</p>
             </div>
           </div>

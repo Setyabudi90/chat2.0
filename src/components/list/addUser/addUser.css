@@ -51,6 +51,12 @@
           object-fit: cover;
           border-radius: 50%;
         }
+
+        .verified {
+          width: 14px;
+          height: 14px;
+          margin-left: 4px;
+        }
       }
 
       button {

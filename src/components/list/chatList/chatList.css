@@ -46,6 +46,23 @@
     border-bottom: 1px solid #dddddd35;
     padding: 20px;
 
+    &:hover {
+      background-color: #dddddd12;
+    }
+
+    .texts{
+      span {
+        display: flex;
+        align-items: center;
+
+        .verified{
+          width: 15px;
+          height: 15px;
+          margin-left: 4px;
+        }
+      }
+    }
+
     img {
       width: 50px;
       height: 50px;

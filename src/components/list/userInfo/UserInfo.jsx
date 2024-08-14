@@ -1,27 +1,43 @@
 import "./userInfo.css";
 import { useUserStore } from "../../../libs/useStore";
+import { useState } from "react";
+import ProfilePopup from "../../profile/ProfilePopup";
 const UserInfo = () => {
   const { currentUser } = useUserStore();
+  const [showProfilePopup, setShowProfilePopup] = useState(false);
+
+  const openProfilePopup = () => setShowProfilePopup(true);
+  const closeProfilePopup = () => setShowProfilePopup(false);
 
   const validateUsername = (username) => {
-    if (username.length > 9) {
-      return username.slice(0, 9) + "...";
+    if (username.length > 19) {
+      return username.slice(0, 18) + "...";
     }
     return username;
   };
-
   const username = validateUsername(currentUser?.username);
   return (
     <div className="userInfo">
       <div className="user">
         <img src={currentUser?.imgURL || "/default-avatar.jpg"} alt="avatar" />
-        <h2>{username}</h2>
+        <h2>
+          {username}
+          {currentUser?.isVerified && (
+            <img
+              className="verified"
+              title="verified"
+              src="/verified.png"
+              alt="verified"
+            />
+          )}
+        </h2>
       </div>
       <div className="icons">
-        <img src="/more.png" alt="more" />
-        <img src="/video.png" alt="video" />
-        <img src="/edit.png" alt="edit" />
+        <img src="/more.png" alt="more" onClick={openProfilePopup} />
       </div>
+      {showProfilePopup && (
+        <ProfilePopup userId={currentUser.id} onClose={closeProfilePopup} />
+      )}
     </div>
   );
 };

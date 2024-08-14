@@ -25,14 +25,23 @@
         object-fit: cover;
       }
 
+      
       .texts {
         display: flex;
         flex-direction: column;
         gap: 5px;
-
+        
         h2 {
+          display: flex;
           font-weight: 500;
           font-size: 18px;
+          align-items: center;
+
+          .verified {
+            width: 15px;
+            height: 15px;
+            margin-left: 5px;
+          }
         }
 
         p {

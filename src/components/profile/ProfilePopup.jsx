@@ -71,7 +71,7 @@ const ProfilePopup = ({ userId, onClose }) => {
         </button>
         <div className="profile-popup-avatar-section">
           <img
-            src={avatarURL.url || "default-avatar.png"}
+            src={avatarURL.url || "/default-avatar.jpg"}
             alt="Avatar"
             className="profile-popup-avatar-img"
           />

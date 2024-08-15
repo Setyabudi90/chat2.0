@@ -13,8 +13,6 @@ import { db } from "../../libs/firebase";
 import { chatStore } from "../../libs/chatStore";
 import { useUserStore } from "../../libs/useStore";
 import Tambah from "../../libs/upload";
-import { toast } from "react-toastify";
-import { update } from "firebase/database";
 
 const Chat = () => {
   const [open, setOpen] = useState(false);
@@ -27,6 +25,7 @@ const Chat = () => {
   const [userStatus, setUserStatus] = useState("Offline");
 
   const endRef = useRef(null);
+  const audioRef = useRef(new Audio("/notif/notification.mp3"));  
 
   const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } = chatStore();
   const { currentUser } = useUserStore();
@@ -38,12 +37,20 @@ const Chat = () => {
   useEffect(() => {
     if (chatId) {
       const unSub = onSnapshot(doc(db, "chats", chatId), (response) => {
-        setChat(response.data());
+        const chatData = response.data();
+        setChat(chatData);
+
+        if (chatData?.messages?.length > (chat?.messages?.length || 0)) {
+          const newMessage = chatData.messages[chatData.messages.length - 1];
+          if (newMessage.senderId !== currentUser.id && userStatus !== "offline") {
+            audioRef.current.play();
+          }
+        }
       });
 
       return () => unSub();
     }
-  }, [chatId]);
+  }, [chatId, chat?.messages?.length, userStatus]);
 
   const handleImg = (e) => {
     if (e.target.files[0]) {

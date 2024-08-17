@@ -155,15 +155,14 @@ const Chat = () => {
 
     let hours = date.getHours();
     const minutes = date.getMinutes();
-    const secondsPart = date.getSeconds();
 
     const ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12;
     hours = hours ? hours : 12;
 
-    const timeString = `${String(hours).padStart(2, "0")}:${String(
+    const timeString = `${String(hours).padStart(2, "0")}.${String(
       minutes
-    ).padStart(2, "0")}:${String(secondsPart).padStart(2, "0")} ${ampm}`;
+    ).padStart(2, "0")} ${ampm}`;
 
     return timeString;
   };

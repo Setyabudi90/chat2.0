@@ -43,8 +43,7 @@ const Chat = () => {
 
         if (chatData?.messages?.length > (chat?.messages?.length || 0)) {
           const newMessage = chatData.messages[chatData.messages.length - 1];
-          const isNewMessage = 
-            new Date(newMessage.createdAt.seconds * 1000).getTime() !== lastMessageTimestampRef.current;
+          const isNewMessage = newMessage.id !== lastMessageTimestampRef.current;
 
           if (
             newMessage.senderId !== currentUser.id &&
@@ -53,9 +52,7 @@ const Chat = () => {
             audioRef.current.play();
           }
 
-          lastMessageTimestampRef.current = new Date(
-            newMessage.createdAt.seconds * 1000
-          ).getTime();
+          lastMessageTimestampRef.current = newMessage.id
         }
       });
 

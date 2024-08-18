@@ -141,7 +141,6 @@ const Chat = () => {
 
     window.addEventListener("beforeunload", setUserOffline);
     window.addEventListener("pagehide", setUserOffline);
-    window.addEventListener("visibilitychange", setUserOffline);
 
     return () => {
       setUserOffline();

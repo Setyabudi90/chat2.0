@@ -5,8 +5,8 @@ import { getStorage } from "firebase/storage";
 import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAOkE27nXxkipOczHekDsaoS3tXpqWOIEo",
-  authDomain: "react-chat-98ca7.firebaseapp.com",
+  apiKey: import.meta.env.VITE_FIREBASE_GOOGLE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
   projectId: "react-chat-98ca7",
   storageBucket: "react-chat-98ca7.appspot.com",
   messagingSenderId: "236660772088",

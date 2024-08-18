@@ -7,7 +7,6 @@ import {
   onSnapshot,
   updateDoc,
   getDoc,
-  setDoc,
 } from "firebase/firestore";
 import { db } from "../../libs/firebase";
 import { chatStore } from "../../libs/chatStore";
@@ -25,7 +24,8 @@ const Chat = () => {
   const [userStatus, setUserStatus] = useState("Offline");
 
   const endRef = useRef(null);
-  const audioRef = useRef(new Audio("/notif/notification.mp3"));  
+  const audioRef = useRef(new Audio("/notif/notification.mp3"));
+  const lastMessageTimestampRef = useRef(null);
 
   const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } = chatStore();
   const { currentUser } = useUserStore();
@@ -38,19 +38,32 @@ const Chat = () => {
     if (chatId) {
       const unSub = onSnapshot(doc(db, "chats", chatId), (response) => {
         const chatData = response.data();
+
         setChat(chatData);
 
         if (chatData?.messages?.length > (chat?.messages?.length || 0)) {
           const newMessage = chatData.messages[chatData.messages.length - 1];
-          if (newMessage.senderId !== currentUser.id && userStatus !== "offline") {
+          const isNewMessage = !lastMessageTimestampRef.current ||
+            new Date(newMessage.createdAt.seconds * 1000).getTime() > lastMessageTimestampRef.current;
+
+          if (
+            newMessage.senderId !== currentUser.id &&
+            isNewMessage && userStatus !== "Offline"
+          ) {
             audioRef.current.play();
           }
+
+          lastMessageTimestampRef.current = new Date(
+            newMessage.createdAt.seconds * 1000
+          ).getTime();
         }
       });
 
       return () => unSub();
     }
   }, [chatId, chat?.messages?.length, userStatus]);
+
+ 
 
   const handleImg = (e) => {
     if (e.target.files[0]) {
@@ -82,6 +95,7 @@ const Chat = () => {
           text,
           createdAt: new Date(),
           ...(imgUrl && { img: imgUrl }),
+          id: Date.now(),
         }),
       });
 
@@ -130,6 +144,7 @@ const Chat = () => {
 
     window.addEventListener("beforeunload", setUserOffline);
     window.addEventListener("pagehide", setUserOffline);
+    window.addEventListener("visibilitychange", setUserOffline);
 
     return () => {
       setUserOffline();
@@ -155,15 +170,14 @@ const Chat = () => {
 
     let hours = date.getHours();
     const minutes = date.getMinutes();
-    const secondsPart = date.getSeconds();
 
     const ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12;
     hours = hours ? hours : 12;
 
-    const timeString = `${String(hours).padStart(2, "0")}:${String(
+    const timeString = `${String(hours).padStart(2, "0")}.${String(
       minutes
-    ).padStart(2, "0")}:${String(secondsPart).padStart(2, "0")} ${ampm}`;
+    ).padStart(2, "0")} ${ampm}`;
 
     return timeString;
   };

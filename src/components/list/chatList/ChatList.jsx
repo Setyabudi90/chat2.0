@@ -76,11 +76,18 @@ const ChatList = () => {
   };
 
   const validateLastMessage = (message) => {
-    if (message.length > 26) {
-      return message.slice(0, 26) + "...";
+    if (message.length > 25) {
+      return message.slice(0, 24) + "...";
     }
     return message;
   };
+
+  const validateUsername = (username) => {
+    if(username.length > 18){
+      return username.slice(0, 17) + "...";
+    }
+    return username;
+  }
 
   const handleSearch = (e) => {
     const query = e.target.value;
@@ -137,7 +144,7 @@ const ChatList = () => {
             />
             <div className="texts">
               <span>
-                {chat?.user.username}
+                {validateUsername(chat?.user?.username)}
                 {chat?.user.isVerified && (
                   <img
                     className="verified"

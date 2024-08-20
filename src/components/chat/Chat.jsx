@@ -22,6 +22,7 @@ const Chat = () => {
     url: "",
   });
   const [userStatus, setUserStatus] = useState("Offline");
+  const [isTyping, setIsTyping] = useState(false);
 
   const endRef = useRef(null);
   const audioRef = useRef(new Audio("/notif/notification.mp3"));
@@ -279,7 +280,7 @@ const Chat = () => {
           />
           <div className="picker">
             {isCurrentUserBlocked || isReceiverBlocked ? null : (
-              <EmojiPicker open={open} onEmojiClick={clickedEmoji} />
+              <EmojiPicker open={open} onEmojiClick={clickedEmoji} onReactionClick={clickedEmoji} />
             )}
           </div>
         </div>

@@ -20,17 +20,20 @@ const UserInfo = () => {
     <div className="userInfo">
       <div className="user">
         <img src={currentUser?.imgURL || "/default-avatar.jpg"} alt="avatar" />
-        <h2>
-          {username}
-          {currentUser?.isVerified && (
-            <img
-              className="verified"
-              title="verified"
-              src="/verified.png"
-              alt="verified"
-            />
-          )}
-        </h2>
+        <div className="content">
+          <h2>
+            {username}
+            {currentUser?.isVerified && (
+              <img
+                className="verified"
+                title="verified"
+                src="/verified.png"
+                alt="verified"
+              />
+            )}
+          </h2>
+          <p>{!currentUser?.isVerified && currentUser?.email}</p>
+        </div>
       </div>
       <div className="icons">
         <img src="/more.png" alt="more" onClick={openProfilePopup} />

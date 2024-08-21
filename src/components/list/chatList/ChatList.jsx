@@ -109,7 +109,7 @@ const ChatList = () => {
         <div className="searchBar">
           <img src="/search.png" alt="Pencarian" onClick={handleSearch} />
           <input
-            type="search"
+            type="text"
             placeholder="Cari..."
             onInput={handleSearch}
             onChange={handleSearch}

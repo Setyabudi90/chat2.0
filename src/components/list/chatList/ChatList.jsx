@@ -129,6 +129,7 @@ const ChatList = () => {
           <div
             className="item"
             key={chat.chatId}
+            data-active={chatId === chat.chatId}
             onClick={() => handleSelect(chat)}
             style={{
               backgroundColor: chat?.isSeen ? "transparent" : "#dddddd12",

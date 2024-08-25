@@ -12,6 +12,8 @@ import { db } from "../../libs/firebase";
 import { chatStore } from "../../libs/chatStore";
 import { useUserStore } from "../../libs/useStore";
 import Tambah from "../../libs/upload";
+import TambahkanVideo from "../../libs/uploadVideo";
+import { toast } from "react-toastify";
 
 const Chat = () => {
   const [open, setOpen] = useState(false);
@@ -21,8 +23,11 @@ const Chat = () => {
     file: null,
     url: "",
   });
+  const [video, setVideo] = useState({
+    file: null,
+    url: "",
+  });
   const [userStatus, setUserStatus] = useState("Offline");
-  const [isTyping, setIsTyping] = useState(false);
 
   const endRef = useRef(null);
   const audioRef = useRef(new Audio("/notif/notification.mp3"));
@@ -44,16 +49,18 @@ const Chat = () => {
 
         if (chatData?.messages?.length > (chat?.messages?.length || 0)) {
           const newMessage = chatData.messages[chatData.messages.length - 1];
-          const isNewMessage = newMessage.id !== lastMessageTimestampRef.current;
+          const isNewMessage =
+            newMessage.id !== lastMessageTimestampRef.current;
 
           if (
             newMessage.senderId !== currentUser.id &&
-            isNewMessage && userStatus !== "Offline"
+            isNewMessage &&
+            userStatus !== "Offline"
           ) {
             audioRef.current.play();
           }
 
-          lastMessageTimestampRef.current = newMessage.id
+          lastMessageTimestampRef.current = newMessage.id;
         }
       });
 
@@ -61,11 +68,28 @@ const Chat = () => {
     }
   }, [chatId, chat?.messages?.length, userStatus]);
 
- 
-
   const handleImg = (e) => {
+    const MAX_SIZE = 50 * 1024 * 1024;
+    if (e.target.files[0] > MAX_SIZE) {
+      toast.warning("File too large. Maximum file size is 50MB");
+      return;
+    }
     if (e.target.files[0]) {
       setImg({
+        file: e.target.files[0],
+        url: URL.createObjectURL(e.target.files[0]),
+      });
+    }
+  };
+
+  const handleVideo = (e) => {
+    const MAX_SIZE = 100 * 1024 * 1024;
+    if (e.target.files[0] > MAX_SIZE) {
+      toast.warning("File too large. Maximum file size is 100MB");
+      return;
+    }
+    if (e.target.files[0]) {
+      setVideo({
         file: e.target.files[0],
         url: URL.createObjectURL(e.target.files[0]),
       });
@@ -78,23 +102,35 @@ const Chat = () => {
   };
 
   const handleSend = async () => {
-    if (text.trim() === "" || text === "") return;
+    if (text.trim() === "" && !img.file && !video.file) return;
 
     let imgUrl = null;
+    let videoUrl = null;
 
     try {
       if (img.file) {
         imgUrl = await Tambah(img.file);
       }
 
+      if (video.file) {
+        videoUrl = await TambahkanVideo(video.file);
+      }
+
+      const messageData = {
+        senderId: currentUser.id,
+        text,
+        createdAt: new Date(),
+        id: Date.now(),
+      };
+
+      if (imgUrl) {
+        messageData.img = imgUrl;
+      } else if (videoUrl) {
+        messageData.video = videoUrl;
+      }
+
       await updateDoc(doc(db, "chats", chatId), {
-        messages: arrayUnion({
-          senderId: currentUser.id,
-          text,
-          createdAt: new Date(),
-          ...(imgUrl && { img: imgUrl }),
-          id: Date.now(),
-        }),
+        messages: arrayUnion(messageData),
       });
 
       const userIDs = [currentUser.id, user.id];
@@ -124,7 +160,10 @@ const Chat = () => {
       file: null,
       url: "",
     });
-
+    setVideo({
+      file: null,
+      url: "",
+    });
     setText("");
   };
 
@@ -228,6 +267,12 @@ const Chat = () => {
                   className="ownImg"
                 />
               )}
+              {message.video && (
+                <video controls controlsList="nodownload" className="ownVideo">
+                  <source src={message.video} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              )}
               <p>{message.text}</p>
               <span>{Times(message?.createdAt)}</span>
             </div>
@@ -240,11 +285,23 @@ const Chat = () => {
             </div>
           </div>
         )}
+        {video.url && (
+          <div className="message own">
+            <div className="texts">
+              <video controls className="ownVideo">
+                <source src={video.url} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+        )}
         <div ref={endRef}></div>
       </div>
       <div className="bottom">
         <div className="icons">
-          <img src="/camera.png" alt="camera" />
+          <label htmlFor="video">
+            <img src="https://img.icons8.com/glyph-neue/64/FFFFFF/cinema---v1.png" className="video" alt="video" />
+          </label>
           <label htmlFor="file">
             <img src="/img.png" alt="image" />
           </label>
@@ -253,6 +310,13 @@ const Chat = () => {
             style={{ display: "none" }}
             onChange={handleImg}
             id="file"
+          />
+          <input
+            type="file"
+            accept="video/*"
+            style={{ display: "none" }}
+            onChange={handleVideo}
+            id="video"
           />
           <img src="/mic.png" alt="mic" />
         </div>
@@ -280,7 +344,11 @@ const Chat = () => {
           />
           <div className="picker">
             {isCurrentUserBlocked || isReceiverBlocked ? null : (
-              <EmojiPicker open={open} onEmojiClick={clickedEmoji} onReactionClick={clickedEmoji} />
+              <EmojiPicker
+                open={open}
+                onEmojiClick={clickedEmoji}
+                onReactionClick={clickedEmoji}
+              />
             )}
           </div>
         </div>

@@ -73,7 +73,7 @@ const Login = () => {
     
   };
   return (
-    <div className="login">
+    <div className="login" name="login">
       <div className="item">
         <h2>Welcome Back</h2>
         <form onSubmit={handleLogin}>
@@ -91,7 +91,7 @@ const Login = () => {
       <div className="separator"></div>
       <div className="item">
         <h2>Create An Account</h2>
-        <form onSubmit={handleRegister}>
+        <form onSubmit={handleRegister} name="register">
           <div className="profile">
             <img
               src={
@@ -108,8 +108,8 @@ const Login = () => {
             style={{ display: "none" }}
             onChange={handleAvatar}
           />
-          <input type="text" placeholder="Nickname less than 10" name="username" required />
-          <input type="email" placeholder="Email" name="email" required />
+          <input type="text" placeholder="Nickname less than 10" name="username" required minLength={7} maxLength={25} />
+          <input type="email" placeholder="Email" name="email" required/>
           <input
             type="password"
             placeholder="password"

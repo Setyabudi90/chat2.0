@@ -6,14 +6,22 @@ import "./detail.css";
 import { toast } from "react-toastify";
 
 const Detail = () => {
-  const { chatdId, user, isCurrentUserBlocked, isReceiverBlocked, changeBlock } = chatStore();
+  const {
+    chatdId,
+    user,
+    isCurrentUserBlocked,
+    isReceiverBlocked,
+    changeBlock,
+  } = chatStore();
   const { currentUser } = useUserStore();
 
   const handleBlock = async () => {
     if (!user) return;
 
     const userDocRef = doc(db, "users", currentUser.id);
-    const updateData = isReceiverBlocked ? arrayRemove(user.id) : arrayUnion(user.id);
+    const updateData = isReceiverBlocked
+      ? arrayRemove(user.id)
+      : arrayUnion(user.id);
 
     try {
       await updateDoc(userDocRef, { blocked: updateData });
@@ -50,12 +58,18 @@ const Detail = () => {
             <img src="/arrowUp.png" alt="up" />
           </div>
         </div>
-        <button onClick={handleBlock}>
-          {isCurrentUserBlocked ? "You've been blocked" : isReceiverBlocked ? "User been Blocked" : "Block This User"}
-        </button>
-        <button className="logout" onClick={() => auth.signOut()}>
-          Sign Out
-        </button>
+        <div className="content">
+          <button onClick={handleBlock}>
+            {isCurrentUserBlocked
+              ? "You've been blocked"
+              : isReceiverBlocked
+              ? "User been Blocked"
+              : "Block This User"}
+          </button>
+          <button className="logout" onClick={() => auth.signOut()}>
+            Sign Out
+          </button>
+        </div>
       </div>
     </div>
   );

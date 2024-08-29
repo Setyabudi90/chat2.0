@@ -1,6 +1,7 @@
 .detail {
   flex: 1;
   overflow: scroll;
+  position: relative;
 
   .user {
     padding: 30px 20px;
@@ -22,6 +23,7 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 20px;
 
     .option {
@@ -42,30 +44,37 @@
     }
   }
 
-  button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #f21818;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 500;
+  .content {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 86%;
+    bottom: 15px;
+    gap: 15px;
+    button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #f21818;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 500;
 
-    &:hover {
-      background-color: #e52e16;
+      &:hover {
+        background-color: #e52e16;
+      }
     }
-  }
-  .logout {
-    padding: 10px 20px;
-    font-size: 1rem;
-    background-color: rgba(0, 68, 255, 0.849);
-
-    &:hover {
+    .logout {
+      padding: 10px 20px;
+      font-size: 1rem;
       background-color: rgba(0, 68, 255, 0.849);
+
+      &:hover {
+        background-color: rgba(0, 68, 255, 0.849);
+      }
     }
   }
 }
-
 
 .detail::-webkit-scrollbar {
   display: none;

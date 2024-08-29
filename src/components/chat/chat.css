@@ -117,6 +117,8 @@
           padding: 20px;
           border-radius: 10px;
           background-color: rgba(17, 25, 40, 1);
+          color: #fff;
+          word-break: break-word;
         }
 
         span {

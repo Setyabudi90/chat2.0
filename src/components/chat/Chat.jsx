@@ -300,7 +300,11 @@ const Chat = () => {
       <div className="bottom">
         <div className="icons">
           <label htmlFor="video">
-            <img src="https://img.icons8.com/glyph-neue/64/FFFFFF/cinema---v1.png" className="video" alt="video" />
+            <img
+              src="https://img.icons8.com/glyph-neue/64/FFFFFF/cinema---v1.png"
+              className="video"
+              alt="video"
+            />
           </label>
           <label htmlFor="file">
             <img src="/img.png" alt="image" />

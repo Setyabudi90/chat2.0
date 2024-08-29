@@ -142,6 +142,7 @@ const ChatList = () => {
                   : chat.user.imgURL
               }
               alt="avatar"
+              style={{ objectFit: "cover" }}
             />
             <div className="texts">
               <span>

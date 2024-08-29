@@ -180,7 +180,14 @@ const Chat = () => {
     setUserOnline();
 
     window.addEventListener("beforeunload", setUserOffline);
-    window.addEventListener("pagehide", setUserOffline);
+    // window.addEventListener("pagehide", setUserOffline);
+    window.addEventListener("visibilitychange", function () {
+      if (document.hidden === true) {
+        setUserOffline();
+      } else {
+        setUserOnline();
+      }
+    });
 
     return () => {
       setUserOffline();
@@ -223,7 +230,11 @@ const Chat = () => {
       /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
 
     if (urlPattern.test(message)) {
-      return message.replace(urlPattern, (url) => `<a href="${url}" target="_blank" rel="noopener noreferrer" role="button">${url}</a>`);
+      return message.replace(
+        urlPattern,
+        (url) =>
+          `<a href="${url}" target="_blank" rel="noopener noreferrer" role="button">${url}</a>`
+      );
     } else {
       return message;
     }
@@ -284,7 +295,11 @@ const Chat = () => {
                   Your browser does not support the video tag.
                 </video>
               )}
-              <p dangerouslySetInnerHTML={{ __html: checkingMessage(message.text) }} />
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: checkingMessage(message.text),
+                }}
+              />
               <span>{Times(message?.createdAt)}</span>
             </div>
           </div>

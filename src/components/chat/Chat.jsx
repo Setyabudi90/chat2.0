@@ -218,6 +218,17 @@ const Chat = () => {
     return timeString;
   };
 
+  const checkingMessage = (message) => {
+    const urlPattern =
+      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
+
+    if (urlPattern.test(message)) {
+      return message.replace(urlPattern, (url) => `<a href="${url}" target="_blank" rel="noopener noreferrer" role="button">${url}</a>`);
+    } else {
+      return message;
+    }
+  };
+
   return (
     <div className="chat">
       <div className="top">
@@ -273,7 +284,7 @@ const Chat = () => {
                   Your browser does not support the video tag.
                 </video>
               )}
-              <p>{message.text}</p>
+              <p dangerouslySetInnerHTML={{ __html: checkingMessage(message.text) }} />
               <span>{Times(message?.createdAt)}</span>
             </div>
           </div>

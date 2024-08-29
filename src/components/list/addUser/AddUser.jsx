@@ -45,7 +45,7 @@ const AddUser = () => {
 
   const handleAdd = async () => {
     if (!user || loading) return;
-    if(user.id === currentUser.id){
+    if (user.id === currentUser.id) {
       toast.info("You can't add yourself");
       return;
     }
@@ -110,16 +110,17 @@ const AddUser = () => {
         <div className="user">
           <div className="detail">
             <img src={user.imgURL || "/default-avatar.jpg"} alt="avatar" />
-            <span>
-              {user?.username}
-                {user?.isVerified && (
-                  <img
-                    src="/verified.png"
-                    alt="verified"
-                    className="verified"
-                  />
-                )}
-            </span>
+            <div className="main">
+              <span>{user?.username}</span>
+              {user?.isVerified && (
+                <img
+                  src="/verified.png"
+                  alt="verified"
+                  title="verified"
+                  className="verified"
+                />
+              )}
+            </div>
           </div>
           <button onClick={handleAdd} disabled={loading}>
             Add

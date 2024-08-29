@@ -119,6 +119,10 @@
           background-color: rgba(17, 25, 40, 1);
           color: #fff;
           word-break: break-word;
+
+          a {
+            color: #27a89e;
+          }
         }
 
         span {

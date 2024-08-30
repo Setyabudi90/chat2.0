@@ -104,7 +104,7 @@ const ProfilePopup = ({ userId, onClose }) => {
             type="text"
             value={newUsername}
             onChange={(e) => setNewUsername(e.target.value)}
-            placeholder="New Username"
+            placeholder="Enter New Username"
             className="profile-popup-username-input"
           />
           <div className="profile-popup-button-container">

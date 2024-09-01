@@ -13,6 +13,7 @@ import { chatStore } from "../../libs/chatStore";
 import { useUserStore } from "../../libs/useStore";
 import Tambah from "../../libs/upload";
 import TambahkanVideo from "../../libs/uploadVideo";
+import TambahkanFiles from "../../libs/uploadFiles";
 import { toast } from "react-toastify";
 
 const Chat = () => {
@@ -23,9 +24,16 @@ const Chat = () => {
     file: null,
     url: "",
   });
+  const [dropdown, setDropdown] = useState(false);
   const [video, setVideo] = useState({
     file: null,
     url: "",
+  });
+  const [files, setFiles] = useState({
+    file: null,
+    url: "",
+    name: "",
+    size: 0,
   });
   const [userStatus, setUserStatus] = useState("Offline");
 
@@ -70,7 +78,7 @@ const Chat = () => {
 
   const handleImg = (e) => {
     const MAX_SIZE = 50 * 1024 * 1024;
-    if (e.target.files[0] > MAX_SIZE) {
+    if (e.target.files[0].size > MAX_SIZE) {
       toast.warning("File too large. Maximum file size is 50MB");
       return;
     }
@@ -84,7 +92,7 @@ const Chat = () => {
 
   const handleVideo = (e) => {
     const MAX_SIZE = 100 * 1024 * 1024;
-    if (e.target.files[0] > MAX_SIZE) {
+    if (e.target.files[0].size > MAX_SIZE) {
       toast.warning("File too large. Maximum file size is 100MB");
       return;
     }
@@ -92,6 +100,26 @@ const Chat = () => {
       setVideo({
         file: e.target.files[0],
         url: URL.createObjectURL(e.target.files[0]),
+      });
+    }
+  };
+
+  const handleFiles = (e) => {
+    const MAX_SIZE = 100 * 1024 * 1024;
+    if (e.target.files[0] > MAX_SIZE) {
+      toast.warning("File too large. Maximum file size is 100MB");
+      return;
+    }
+
+    console.log(e.target.files[0].type);
+
+    if (e.target.files[0]) {
+      setFiles({
+        file: e.target.files[0],
+        url: URL.createObjectURL(e.target.files[0]),
+        name: e.target.files[0].name,
+        size: e.target.files[0].size,
+        type: e.target.files[0].type,
       });
     }
   };
@@ -106,6 +134,7 @@ const Chat = () => {
 
     let imgUrl = null;
     let videoUrl = null;
+    let fileUrl = null;
 
     try {
       if (img.file) {
@@ -114,6 +143,10 @@ const Chat = () => {
 
       if (video.file) {
         videoUrl = await TambahkanVideo(video.file);
+      }
+
+      if (files.file) {
+        fileUrl = await TambahkanFiles(files.file);
       }
 
       const messageData = {
@@ -127,6 +160,13 @@ const Chat = () => {
         messageData.img = imgUrl;
       } else if (videoUrl) {
         messageData.video = videoUrl;
+      } else if (fileUrl) {
+        messageData.file = {
+          url: fileUrl,
+          name: files.name,
+          size: files.size,
+          type: files.type,
+        };
       }
 
       await updateDoc(doc(db, "chats", chatId), {
@@ -163,6 +203,13 @@ const Chat = () => {
     setVideo({
       file: null,
       url: "",
+    });
+    setFiles({
+      file: null,
+      url: "",
+      name: "",
+      size: 0,
+      type: null,
     });
     setText("");
   };
@@ -223,6 +270,48 @@ const Chat = () => {
     ).padStart(2, "0")} ${ampm}`;
 
     return timeString;
+  };
+
+  const getTypeFiles = (type) => {
+    if (type === "application/pdf") {
+      return (
+        <img
+          src="https://img.icons8.com/ios-filled/50/FFFFFF/pdf--v1.png"
+          alt="pdf--v1"
+        />
+      );
+    } else if (type === "application/audio") {
+      return (
+        <img
+          src="https://img.icons8.com/ios-filled/50/FFFFFF/high-volume--v1.png"
+          alt="high-volume--v1"
+        />
+      );
+    } else if (type === "application/zip") {
+      return (
+        <img
+          src="https://img.icons8.com/ios-filled/50/FFFFFF/zip.png"
+          alt="zip"
+        />
+      );
+    } else if (
+      type ===
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      return (
+        <img
+          src="https://img.icons8.com/ios-filled/50/FFFFFF/document--v1.png"
+          alt="document--v1"
+        />
+      );
+    } else {
+      return (
+        <img
+          src="https://img.icons8.com/ios-filled/50/FFFFFF/file.png"
+          alt="file"
+        />
+      );
+    }
   };
 
   const checkingMessage = (message) => {
@@ -295,6 +384,33 @@ const Chat = () => {
                   Your browser does not support the video tag.
                 </video>
               )}
+              {message.file && (
+                <>
+                  <div
+                    className={
+                      message?.senderId === currentUser.id
+                        ? "file-message own"
+                        : "file-message"
+                    }
+                  >
+                    <div className="file-icon">
+                      {getTypeFiles(message.file?.type)}
+                    </div>
+                    <div className="file-details">
+                      <a
+                        href={message.file.url}
+                        download={message.file.name}
+                        className="file-name"
+                      >
+                        {message.file.name}
+                      </a>
+                      <span className="file-size">
+                        Ukuran File: {(message.file.size / 1024).toFixed(2)} KB
+                      </span>
+                    </div>
+                  </div>
+                </>
+              )}
               <p
                 dangerouslySetInnerHTML={{
                   __html: checkingMessage(message.text),
@@ -321,25 +437,78 @@ const Chat = () => {
             </div>
           </div>
         )}
+        {files.url && (
+          <div className="message own">
+            <div className="texts">
+              <div className="file-message">
+                <div className="file-icon">{getTypeFiles(files.type)}</div>
+                <div className="file-details">
+                  <a
+                    href={files.url}
+                    download={files.name}
+                    className="file-name"
+                  >
+                    {files.name}
+                  </a>
+                  <span className="file-size">
+                    Ukuran File: {(files.size / 1024).toFixed(2)} KB
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         <div ref={endRef}></div>
       </div>
       <div className="bottom">
         <div className="icons">
-          <label htmlFor="video">
-            <img
-              src="https://img.icons8.com/glyph-neue/64/FFFFFF/cinema---v1.png"
-              className="video"
-              alt="video"
-            />
-          </label>
-          <label htmlFor="file">
-            <img src="/img.png" alt="image" />
-          </label>
+          <img src="/camera.png" alt="camera" />
+          <img
+            width="50"
+            height="50"
+            className="plus"
+            src="https://img.icons8.com/ios-filled/50/FFFFFF/plus.png"
+            alt="plus"
+            onClick={() => setDropdown(!dropdown)}
+          />
+          {dropdown && (
+            <div className="card" id="dropdown">
+              <label htmlFor="video">
+                <img
+                  src="https://img.icons8.com/glyph-neue/64/FFFFFF/cinema---v1.png"
+                  className="video"
+                  alt="video"
+                />
+                Video
+              </label>
+              <label htmlFor="file">
+                <img src="/img.png" alt="image" />
+                Image
+              </label>
+              <label htmlFor="filesInput">
+                <img
+                  src="https://img.icons8.com/ios-filled/50/FFFFFF/file.png"
+                  alt="file"
+                  width={50}
+                  height={50}
+                />
+                File
+              </label>
+            </div>
+          )}
           <input
             type="file"
+            accept="image/*"
             style={{ display: "none" }}
             onChange={handleImg}
             id="file"
+          />
+          <input
+            type="file"
+            style={{ display: "none" }}
+            onChange={handleFiles}
+            accept="file/*"
+            id="filesInput"
           />
           <input
             type="file"

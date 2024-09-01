@@ -36,7 +36,17 @@ const Detail = () => {
     <div className="detail">
       <div className="user">
         <img src={user?.imgURL || "/default-avatar.jpg"} alt="avatar" />
-        <h2>{user?.username}</h2>
+        <h2>
+          {user?.username}
+          {user?.isVerified && (
+            <img
+              className="verified"
+              title="verified"
+              src="/verified.png"
+              alt="verified"
+            />
+          )}
+        </h2>
         <p>Hey there, I'm using Chats</p>
       </div>
       <div className="info">

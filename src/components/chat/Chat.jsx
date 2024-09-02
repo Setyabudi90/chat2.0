@@ -285,7 +285,7 @@ const Chat = () => {
           alt="high-volume--v1"
         />
       );
-    } else if (type === "application/zip") {
+    } else if (type === "application/zip" || type === "application/x-zip-compressed") {
       return (
         <img
           src="https://img.icons8.com/ios-filled/50/FFFFFF/zip.png"

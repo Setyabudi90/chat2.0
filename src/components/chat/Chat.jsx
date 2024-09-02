@@ -106,12 +106,10 @@ const Chat = () => {
 
   const handleFiles = (e) => {
     const MAX_SIZE = 100 * 1024 * 1024;
-    if (e.target.files[0] > MAX_SIZE) {
+    if (e.target.files[0].size > MAX_SIZE) {
       toast.warning("File too large. Maximum file size is 100MB");
       return;
     }
-
-    console.log(e.target.files[0].type);
 
     if (e.target.files[0]) {
       setFiles({

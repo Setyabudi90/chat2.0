@@ -15,6 +15,7 @@ import Tambah from "../../libs/upload";
 import TambahkanVideo from "../../libs/uploadVideo";
 import TambahkanFiles from "../../libs/uploadFiles";
 import { toast } from "react-toastify";
+import Camera from "../camera/Camera";
 
 const Chat = () => {
   const [open, setOpen] = useState(false);
@@ -36,6 +37,7 @@ const Chat = () => {
     size: 0,
   });
   const [userStatus, setUserStatus] = useState("Offline");
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
 
   const endRef = useRef(null);
   const audioRef = useRef(new Audio("/notif/notification.mp3"));
@@ -314,6 +316,17 @@ const Chat = () => {
     }
   };
 
+  const handleCapture = async (imageSrc) => {
+    const response = await fetch(imageSrc);
+    const blob = await response.blob();
+    const file = new File([blob], "captured-image.jpg", { type: "image/jpeg" });
+
+    setImg({
+      file,
+      url: imageSrc,
+    });
+  };
+
   const checkingMessage = (message) => {
     const urlPattern =
       /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
@@ -460,9 +473,20 @@ const Chat = () => {
         )}
         <div ref={endRef}></div>
       </div>
+      {isCameraOpen && (
+        <Camera
+          onCapture={handleCapture}
+          onClose={() => setIsCameraOpen(false)}
+          isCameraOpen={isCameraOpen}
+        />
+      )}
       <div className="bottom">
         <div className="icons">
-          <img src="/camera.png" alt="camera" />
+          <img
+            src="/camera.png"
+            alt="camera"
+            onClick={() => setIsCameraOpen(!isCameraOpen)}
+          />
           <img
             width="50"
             height="50"

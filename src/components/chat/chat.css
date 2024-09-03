@@ -257,32 +257,32 @@
         z-index: 9999;
       }
     }
+  }
 
-    input {
-      flex: 1;
-      border: none;
-      font-size: 16px;
-      outline: none;
-      padding: 10px 20px;
-      background-color: rgba(17, 25, 40, 0.75);
-      border-radius: 12px;
-      color: #fff;
-    }
+  input {
+    flex: 1;
+    border: none;
+    font-size: 16px;
+    outline: none;
+    padding: 10px 20px;
+    background-color: rgba(17, 25, 40, 0.75);
+    border-radius: 12px;
+    color: #fff;
+  }
 
-    .sendButton {
-      color: #fff;
-      background-color: rgba(36, 63, 119, 0.75);
-      padding: 10px 20px;
-      outline: none;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+  .sendButton {
+    color: #fff;
+    background-color: rgba(36, 63, 119, 0.75);
+    padding: 10px 20px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 
-    .sendButton:disabled {
-      cursor: not-allowed;
-      background-color: rgba(12, 25, 51, 0.404);
-    }
+  .sendButton:disabled {
+    cursor: not-allowed;
+    background-color: rgba(12, 25, 51, 0.404);
   }
 }
 

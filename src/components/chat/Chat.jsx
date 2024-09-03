@@ -108,12 +108,10 @@ const Chat = () => {
 
   const handleFiles = (e) => {
     const MAX_SIZE = 100 * 1024 * 1024;
-    if (e.target.files[0] > MAX_SIZE) {
+    if (e.target.files[0].size > MAX_SIZE) {
       toast.warning("File too large. Maximum file size is 100MB");
       return;
     }
-
-    console.log(e.target.files[0].type);
 
     if (e.target.files[0]) {
       setFiles({
@@ -289,7 +287,7 @@ const Chat = () => {
           alt="high-volume--v1"
         />
       );
-    } else if (type === "application/zip") {
+    } else if (type === "application/zip" || type === "application/x-zip-compressed") {
       return (
         <img
           src="https://img.icons8.com/ios-filled/50/FFFFFF/zip.png"

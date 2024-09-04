@@ -287,7 +287,10 @@ const Chat = () => {
           alt="high-volume--v1"
         />
       );
-    } else if (type === "application/zip" || type === "application/x-zip-compressed") {
+    } else if (
+      type === "application/zip" ||
+      type === "application/x-zip-compressed"
+    ) {
       return (
         <img
           src="https://img.icons8.com/ios-filled/50/FFFFFF/zip.png"
@@ -416,7 +419,11 @@ const Chat = () => {
                         {message.file.name}
                       </a>
                       <span className="file-size">
-                        Ukuran File: {(message.file.size / 1024).toFixed(2)} KB
+                        {`FileSize: ${
+                          message.file.size >= 1024 * 1000
+                            ? (message.file.size / 1048576).toFixed(2) + " MB"
+                            : (message.file.size / 1024).toFixed(2) + " KB"
+                        }`}
                       </span>
                     </div>
                   </div>

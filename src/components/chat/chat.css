@@ -137,6 +137,7 @@
           font-weight: bold;
           color: #9cbcdf;
           text-decoration: none;
+          word-break: break-word;
         }
 
         .file-name:hover {

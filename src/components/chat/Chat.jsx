@@ -16,6 +16,8 @@ import TambahkanVideo from "../../libs/uploadVideo";
 import TambahkanFiles from "../../libs/uploadFiles";
 import { toast } from "react-toastify";
 import Camera from "../camera/Camera";
+import TambahkanAudio from "../../libs/uploadAudio";
+import VoiceRecorder from "../voice/Voice";
 
 const Chat = () => {
   const [open, setOpen] = useState(false);
@@ -36,8 +38,14 @@ const Chat = () => {
     name: "",
     size: 0,
   });
+  const [audio, setAudio] = useState({
+    file: null,
+    url: "",
+  });
   const [userStatus, setUserStatus] = useState("Offline");
   const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordedBlob, setRecordedBlob] = useState(null);
 
   const endRef = useRef(null);
   const audioRef = useRef(new Audio("/notif/notification.mp3"));
@@ -135,6 +143,7 @@ const Chat = () => {
     let imgUrl = null;
     let videoUrl = null;
     let fileUrl = null;
+    let audioUrl = null;
 
     try {
       if (img.file) {
@@ -147,6 +156,14 @@ const Chat = () => {
 
       if (files.file) {
         fileUrl = await TambahkanFiles(files.file);
+      }
+
+      if (recordedBlob) {
+        const audioFile = new File([recordedBlob.blob], "audioMessage.webm", {
+          type: "audio/webm",
+        });
+        audioUrl = await TambahkanAudio(audioFile);
+        console.log(audioUrl);
       }
 
       const messageData = {
@@ -167,6 +184,8 @@ const Chat = () => {
           size: files.size,
           type: files.type,
         };
+      } else if (audioUrl) {
+        messageData.audio = audioUrl;
       }
 
       await updateDoc(doc(db, "chats", chatId), {
@@ -211,7 +230,22 @@ const Chat = () => {
       size: 0,
       type: null,
     });
+    setAudio({
+      file: null,
+      url: "",
+    });
+    setRecordedBlob(null);
     setText("");
+  };
+
+  const handleStartRecording = () => {
+    setIsRecording(true);
+  };
+
+  const handleStopRecording = (recordedBlob) => {
+    setIsRecording(false);
+    setRecordedBlob(recordedBlob);
+    setAudio({ file: recordedBlob.blobURL, url: recordedBlob.blobURL });
   };
 
   useEffect(() => {
@@ -398,6 +432,12 @@ const Chat = () => {
                   Your browser does not support the video tag.
                 </video>
               )}
+              {message.audio && (
+                <audio controls controlsList="nodownload" className="ownAudio">
+                  <source src={message.audio} type="audio/webm" />
+                  Your browser does not support the video tag.
+                </audio>
+              )}
               {message.file && (
                 <>
                   <div
@@ -455,6 +495,16 @@ const Chat = () => {
             </div>
           </div>
         )}
+        {audio.url && (
+          <div className="message own">
+            <div className="texts">
+              <audio controls className="ownAudio">
+                <source src={audio.url} type="audio/webm" />
+                Your browser does not support the video tag.
+              </audio>
+            </div>
+          </div>
+        )}
         {files.url && (
           <div className="message own">
             <div className="texts">
@@ -478,6 +528,12 @@ const Chat = () => {
         )}
         <div ref={endRef}></div>
       </div>
+      {isRecording && (
+        <VoiceRecorder
+          onStopRecording={handleStopRecording}
+          onClose={() => setIsRecording(false)}
+        />
+      )}
       {isCameraOpen && (
         <Camera
           onCapture={handleCapture}
@@ -508,11 +564,11 @@ const Chat = () => {
                   className="video"
                   alt="video"
                 />
-                Video
+                VIDEO
               </label>
               <label htmlFor="file">
                 <img src="/img.png" alt="image" />
-                Image
+                IMAGE
               </label>
               <label htmlFor="filesInput">
                 <img
@@ -521,7 +577,7 @@ const Chat = () => {
                   width={50}
                   height={50}
                 />
-                File
+                FILE
               </label>
             </div>
           )}
@@ -546,7 +602,7 @@ const Chat = () => {
             onChange={handleVideo}
             id="video"
           />
-          <img src="/mic.png" alt="mic" />
+          <img src="/mic.png" alt="mic" onClick={handleStartRecording} />
         </div>
         <input
           type="text"

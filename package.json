@@ -14,17 +14,18 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "axios": "^1.7.7",
     "cors": "^2.8.5",
-    "emoji-picker-react": "^4.11.1",
+    "emoji-picker-react": "^4.12.0",
     "express": "^4.19.2",
     "firebase": "^10.13.1",
     "firebase-admin": "^12.4.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-mic": "^12.4.6",
     "react-toastify": "^10.0.5",
     "react-webcam": "^7.2.0",
     "simple-peer": "^9.11.1",
     "socket.io-client": "^4.7.5",
-    "vite": "^5.4.2",
+    "vite": "^5.4.3",
     "zustand": "^4.5.5"
   },
   "devDependencies": {
@@ -32,7 +33,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react-swc": "^3.7.0",
     "eslint": "^8.57.0",
-    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react": "^7.35.2",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.11"
   }

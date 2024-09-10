@@ -163,7 +163,6 @@ const Chat = () => {
           type: "audio/webm",
         });
         audioUrl = await TambahkanAudio(audioFile);
-        console.log(audioUrl);
       }
 
       const messageData = {

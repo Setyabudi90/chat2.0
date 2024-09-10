@@ -79,6 +79,7 @@ const ProfilePopup = ({ userId, onClose }) => {
             type="file"
             style={{ display: "none" }}
             id="file"
+            accept="image/*"
             onChange={handleAvatar}
             className="profile-popup-file-input"
           />

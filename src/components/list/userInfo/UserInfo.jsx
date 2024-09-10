@@ -8,7 +8,7 @@ const UserInfo = () => {
 
   const openProfilePopup = () => setShowProfilePopup(true);
   const closeProfilePopup = () => setShowProfilePopup(false);
-
+  
   const validateUsername = (username) => {
     if (username.length > 19) {
       return username.slice(0, 18) + "...";

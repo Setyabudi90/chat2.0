@@ -531,7 +531,7 @@ const Chat = () => {
       {isRecording && (
         <VoiceRecorder
           onStopRecording={handleStopRecording}
-          onClose={() => setIsRecording(false)}
+          onClose={() => setIsRecording((prev) => !prev)}
         />
       )}
       {isCameraOpen && (

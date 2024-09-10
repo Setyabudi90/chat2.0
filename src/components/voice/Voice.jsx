@@ -24,19 +24,21 @@ const VoiceRecorder = ({ onStopRecording, onClose }) => {
 
   return (
     <div className="recordedAudio">
-      <button className="close-button" onClick={onClose}>
+      <button className="close-button" onClick={onClose} disabled={isRecording}>
         X
       </button>
       <ReactMic
         record={isRecording}
-        className="sound-wave"
         onStop={onStop}
         onData={onData}
-        strokeColor="#FFFF"
-        backgroundColor="#0d161b"
+        strokeColor="#FFFFFF"
+        backgroundColor="#11192826"
         visualSetting="sinewave"
         mimeType="audio/webm"
       />
+      <recording-status-renderer>
+        {isRecording ? "- Recording" : "- Not Recording"}
+      </recording-status-renderer>
       <div className="buttons">
         <button onClick={startRecording} disabled={isRecording}>
           Start

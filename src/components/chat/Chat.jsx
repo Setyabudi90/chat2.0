@@ -260,7 +260,7 @@ const Chat = () => {
     setUserOnline();
 
     window.addEventListener("beforeunload", setUserOffline);
-    // window.addEventListener("pagehide", setUserOffline);
+    window.addEventListener("pagehide", setUserOffline);
     window.addEventListener("visibilitychange", function () {
       if (document.hidden === true) {
         setUserOffline();

@@ -260,7 +260,7 @@ const Chat = () => {
     setUserOnline();
 
     window.addEventListener("beforeunload", setUserOffline);
-    // window.addEventListener("pagehide", setUserOffline);
+    window.addEventListener("pagehide", setUserOffline);
     window.addEventListener("visibilitychange", function () {
       if (document.hidden === true) {
         setUserOffline();
@@ -402,9 +402,8 @@ const Chat = () => {
             </p>
           </div>
         </div>
+
         <div className="icons">
-          <img src="/phone.png" alt="phone" />
-          <img src="/video.png" alt="video" />
           <img src="/info.png" alt="info" />
         </div>
       </div>
@@ -481,6 +480,10 @@ const Chat = () => {
           <div className="message own">
             <div className="texts">
               <img src={img.url} alt="message" className="ownImg" />
+              <p>
+                Ini adalah preview, agar dapat terkirim ketiklah sebuah caption
+                dan untuk membatalkan silahkan refresh halaman ini
+              </p>
             </div>
           </div>
         )}
@@ -491,6 +494,10 @@ const Chat = () => {
                 <source src={video.url} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
+              <p>
+                Ini adalah preview, agar dapat terkirim ketiklah sebuah caption
+                dan untuk membatalkan silahkan refresh halaman ini
+              </p>
             </div>
           </div>
         )}
@@ -501,6 +508,10 @@ const Chat = () => {
                 <source src={audio.url} type="audio/webm" />
                 Your browser does not support the video tag.
               </audio>
+              <p>
+                Ini adalah preview, agar dapat terkirim ketiklah sebuah caption
+                dan untuk membatalkan silahkan refresh halaman ini
+              </p>
             </div>
           </div>
         )}
@@ -522,6 +533,10 @@ const Chat = () => {
                   </span>
                 </div>
               </div>
+              <p>
+                Ini adalah preview, agar dapat terkirim ketiklah sebuah caption
+                dan untuk membatalkan silahkan refresh halaman ini
+              </p>
             </div>
           </div>
         )}

@@ -1,7 +1,11 @@
 import { useState } from "react";
 import "./login.css";
 import { toast } from "react-toastify";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 import { auth, db } from "../../libs/firebase";
 import { setDoc } from "firebase/firestore";
 import { doc } from "firebase/firestore";
@@ -12,6 +16,8 @@ const Login = () => {
     file: null,
     url: "",
   });
+
+  const [closed, setClose] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -24,12 +30,12 @@ const Login = () => {
     }
   };
 
-  const handleLogin = async(e) => {
-    e.preventDefault()
-    setLoading(true)
-    const formData = new FormData(e.target)
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const formData = new FormData(e.target);
 
-    const { email, password } = Object.fromEntries(formData)
+    const { email, password } = Object.fromEntries(formData);
     try {
       await signInWithEmailAndPassword(auth, email, password);
       toast.success("Login Success");
@@ -41,11 +47,11 @@ const Login = () => {
     }
   };
 
-  const handleRegister = async(e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData(e.target);
-    
+
     const { username, email, password } = Object.fromEntries(formData);
 
     try {
@@ -59,18 +65,31 @@ const Login = () => {
         imgURL,
         id: res.user.uid,
         blocked: [],
-      })
+      });
       await setDoc(doc(db, "userchats", res.user.uid), {
         chats: [],
-      })
+      });
       toast.success("Register Success, You can login now!");
-    }catch(err){
+    } catch (err) {
       console.log(err);
       toast.error(err.message);
-    }finally{
+    } finally {
       setLoading(false);
     }
-    
+  };
+
+  const close = () => setClose(false);
+
+  const handleReset = () => setClose(true);
+
+  const sendResetPassword = (event) => {
+    event.preventDefault();
+    const email = event.target[0].value;
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        toast.success("Password reset sent successfully. check your email!");
+      })
+      .catch((error) => toast.error("An error occured", error));
   };
   return (
     <div className="login" name="login">
@@ -85,21 +104,34 @@ const Login = () => {
             autoComplete="off"
             required
           />
-          <button type="submit" disabled={loading}>{loading ? "Loading..." : "Sign In"}</button>
+          <button type="submit" disabled={loading}>
+            {loading ? "Loading..." : "Sign In"}
+          </button>
         </form>
+        <button onClick={handleReset}>Forgot Password? Klik Here...</button>
       </div>
       <div className="separator"></div>
+      {closed && (
+        <div className="forgot">
+          <button onClick={close} className="close">
+            X
+          </button>
+          <form id="reset-password-form" onSubmit={sendResetPassword}>
+            <input
+              type="email"
+              id="email"
+              placeholder="Enter your email"
+              required
+            />
+            <button type="submit">Send</button>
+          </form>
+        </div>
+      )}
       <div className="item">
         <h2>Create An Account</h2>
         <form onSubmit={handleRegister} name="register">
           <div className="profile">
-            <img
-              src={
-                avatar.url ||
-                "/default-avatar.jpg"
-              }
-              alt="avatar"
-            />
+            <img src={avatar.url || "/default-avatar.jpg"} alt="avatar" />
             <label htmlFor="file">Choose a Avatar</label>
           </div>
           <input
@@ -108,8 +140,15 @@ const Login = () => {
             style={{ display: "none" }}
             onChange={handleAvatar}
           />
-          <input type="text" placeholder="Nickname less than 10" name="username" required minLength={7} maxLength={25} />
-          <input type="email" placeholder="Email" name="email" required/>
+          <input
+            type="text"
+            placeholder="Nickname less than 10"
+            name="username"
+            required
+            minLength={7}
+            maxLength={25}
+          />
+          <input type="email" placeholder="Email" name="email" required />
           <input
             type="password"
             placeholder="password"
@@ -117,7 +156,9 @@ const Login = () => {
             autoComplete="off"
             required
           />
-          <button disabled={loading} type="submit">{loading ? "Loading..." : "Sign Up"}</button>
+          <button disabled={loading} type="submit">
+            {loading ? "Loading..." : "Sign Up"}
+          </button>
         </form>
       </div>
     </div>

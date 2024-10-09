@@ -4,11 +4,15 @@ import { toast } from "react-toastify";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  GithubAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth, db } from "../../libs/firebase";
+import { auth } from "../../libs/firebase";
+import { getDoc, doc } from "firebase/firestore";
 import { setDoc } from "firebase/firestore";
-import { doc } from "firebase/firestore";
+import { db } from "../../libs/firebase";
 import Tambahkan from "../../libs/upload";
 
 const Login = () => {
@@ -80,21 +84,78 @@ const Login = () => {
 
   const close = () => setClose(false);
 
-  const handleReset = () => setClose(true);
+  const handleReset = async () => {
+    setClose(true);
+  };
+
+  const initializeLoginUser = async (photoURL, username, email, id) => {
+    try {
+      await setDoc(doc(db, "users", id), {
+        username,
+        email,
+        imgURL: photoURL,
+        id,
+        blocked: [],
+      });
+      await setDoc(doc(db, "userchats", id), {
+        chats: [],
+      });
+    } catch (error) {}
+  };
+
+  const LoginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const data = await signInWithPopup(auth, provider);
+      const userDoc = await getDoc(doc(db, "users", data.user.uid));
+      if (!userDoc.exists()) {
+        await initializeLoginUser(
+          data.user.photoURL,
+          data.user.displayName,
+          data.user.email,
+          data.user.uid
+        );
+      }
+      toast.success("Login Success, Please refresh this page.");
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const LoginWithGithub = async () => {
+    const provider = new GithubAuthProvider();
+    try {
+      const data = await signInWithPopup(auth, provider);
+      const userDoc = await getDoc(doc(db, "users", data.user.uid));
+      if (!userDoc.exists()) {
+        await initializeLoginUser(
+          data.user.photoURL,
+          data.user.displayName,
+          data.user.email,
+          data.user.uid
+        );
+      }
+      toast.success("Login Success, Please refresh this page.");
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   const sendResetPassword = (event) => {
     event.preventDefault();
     const email = event.target[0].value;
     sendPasswordResetEmail(auth, email)
       .then(() => {
-        toast.success("Password reset sent successfully. check your email!");
+        toast.success(
+          "Password reset sent successfully. check your email now!"
+        );
       })
       .catch((error) => toast.error("An error occured", error));
   };
   return (
     <div className="login" name="login">
       <div className="item">
-        <h2>Welcome Back</h2>
+        <h2>Sign In To Continue✨</h2>
         <form onSubmit={handleLogin}>
           <input type="email" placeholder="email" name="email" required />
           <input
@@ -108,7 +169,29 @@ const Login = () => {
             {loading ? "Loading..." : "Sign In"}
           </button>
         </form>
-        <button onClick={handleReset}>Forgot Password? Klik Here...</button>
+        <div className="provider-login">
+          <button className="google" onClick={LoginWithGoogle}>
+            Login With Google
+            <img
+              width="30"
+              height="30"
+              src="https://img.icons8.com/color/48/google-logo.png"
+              alt="google-logo"
+            />
+          </button>
+          <button className="github" onClick={LoginWithGithub}>
+            Login With Github
+            <img
+              width="30"
+              height="30"
+              src="https://img.icons8.com/fluency/50/github.png"
+              alt="github"
+            />
+          </button>
+        </div>
+        <button onClick={handleReset} className="forgot-password-btn">
+          Forgot Password? Klik Here...
+        </button>
       </div>
       <div className="separator"></div>
       {closed && (

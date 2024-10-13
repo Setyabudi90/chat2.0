@@ -4,6 +4,9 @@ import { arrayRemove, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { chatStore } from "../../libs/chatStore";
 import "./detail.css";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
+import { useState } from "react";
+import { convertBlobURL } from "../../utils/covertBlob";
 
 const Detail = () => {
   const {
@@ -32,10 +35,25 @@ const Detail = () => {
     }
   };
 
+  const [blob, setBlob] = useState(null);
+  useEffect(() => {
+    async function fetchData() {
+      const blob = await convertBlobURL(user?.imgURL);
+      setBlob(blob);
+    }
+
+    fetchData();
+
+    return () => {
+      URL.revokeObjectURL(blob);
+      setBlob(null);
+    };
+  }, []);
+
   return (
     <div className="detail">
       <div className="user">
-        <img src={user?.imgURL || "/default-avatar.jpg"} alt="avatar" />
+        <img src={blob || "/default-avatar.jpg"} alt="avatar" />
         <h2>
           {user?.username}
           {user?.isVerified && (

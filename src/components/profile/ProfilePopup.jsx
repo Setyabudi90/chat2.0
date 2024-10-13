@@ -3,6 +3,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../libs/firebase";
 import "./ProfilePopup.css";
 import Tambahkan from "../../libs/upload";
+import { convertBlobURL } from "../../utils/covertBlob";
 import { toast } from "react-toastify";
 
 const ProfilePopup = ({ userId, onClose }) => {
@@ -63,6 +64,22 @@ const ProfilePopup = ({ userId, onClose }) => {
 
   const nickname = validateUsername(username);
 
+  const [blob, setBlob] = useState(avatarURL.url);
+
+  useEffect(() => {
+    async function fetchData() {
+      const blob = await convertBlobURL(avatarURL.url);
+      setBlob(blob);
+    }
+
+    fetchData();
+
+    return () => {
+      URL.revokeObjectURL(blob);
+      setBlob(null);
+    };
+  }, [avatarURL.url]);
+
   return (
     <div className="profile-popup-overlay">
       <div className="profile-popup-container">
@@ -71,7 +88,7 @@ const ProfilePopup = ({ userId, onClose }) => {
         </button>
         <div className="profile-popup-avatar-section">
           <img
-            src={avatarURL.url || "/default-avatar.jpg"}
+            src={blob || "/default-avatar.jpg"}
             alt="Avatar"
             className="profile-popup-avatar-img"
           />

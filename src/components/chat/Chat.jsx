@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import Camera from "../camera/Camera";
 import TambahkanAudio from "../../libs/uploadAudio";
 import VoiceRecorder from "../voice/Voice";
+import { convertBlobURL } from "../../utils/covertBlob";
 
 const Chat = () => {
   const [open, setOpen] = useState(false);
@@ -202,7 +203,7 @@ const Chat = () => {
           );
           userChatData.chats[chatIndex].lastMessage = text;
           userChatData.chats[chatIndex].isSeen =
-            id === currentUser.id ? true : false;
+            id === currentUser.id || userStatus == "Online" ? true : false;
           userChatData.chats[chatIndex].updatedAt = Date.now();
 
           await updateDoc(userChatRef, {
@@ -376,11 +377,27 @@ const Chat = () => {
     }
   };
 
+  const [blob, setBlob] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      const blob = await convertBlobURL(user?.imgURL);
+      setBlob(blob);
+    }
+
+    fetchData();
+
+    return () => {
+      URL.revokeObjectURL(blob);
+      setBlob(null);
+    };
+  }, []);
+
   return (
     <div className="chat">
       <div className="top">
         <div className="user">
-          <img src={user?.imgURL || "/default-avatar.jpg"} alt="avatar" />
+          <img src={blob || "/default-avatar.jpg"} alt="avatar" />
           <div className="texts">
             <h2>
               {user?.username}
@@ -402,7 +419,6 @@ const Chat = () => {
             </p>
           </div>
         </div>
-
         <div className="icons">
           <img src="/info.png" alt="info" />
         </div>

@@ -6,6 +6,7 @@ import { doc, onSnapshot, getDoc } from "firebase/firestore";
 import { db } from "../../../libs/firebase";
 import { chatStore } from "../../../libs/chatStore";
 import { updateDoc } from "firebase/firestore";
+import { convertBlobURL } from "../../../utils/covertBlob";
 
 const ChatList = () => {
   const [chats, setChats] = useState([]);
@@ -83,11 +84,11 @@ const ChatList = () => {
   };
 
   const validateUsername = (username) => {
-    if(username.length > 18){
+    if (username.length > 18) {
       return username.slice(0, 17) + "...";
     }
     return username;
-  }
+  };
 
   const handleSearch = (e) => {
     const query = e.target.value;
@@ -121,7 +122,7 @@ const ChatList = () => {
           src={mode ? "/minus.png" : "/plus.png"}
           alt="plus-icon"
           className="add"
-          onClick={() => setAddMode((prev) => !prev)}
+          onClick={() => setAddMode((prevousMode) => !prevousMode)}
         />
       </div>
       {chats?.map((chat) => {

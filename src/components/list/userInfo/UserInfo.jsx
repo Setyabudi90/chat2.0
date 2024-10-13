@@ -2,13 +2,16 @@ import "./userInfo.css";
 import { useUserStore } from "../../../libs/useStore";
 import { useState } from "react";
 import ProfilePopup from "../../profile/ProfilePopup";
+import { useEffect } from "react";
+import { convertBlobURL } from "../../../utils/covertBlob";
 const UserInfo = () => {
   const { currentUser } = useUserStore();
   const [showProfilePopup, setShowProfilePopup] = useState(false);
+  const [blob, setBlob] = useState(null);
 
   const openProfilePopup = () => setShowProfilePopup(true);
   const closeProfilePopup = () => setShowProfilePopup(false);
-  
+
   const validateUsername = (username) => {
     if (username.length > 19) {
       return username.slice(0, 18) + "...";
@@ -16,10 +19,24 @@ const UserInfo = () => {
     return username;
   };
   const username = validateUsername(currentUser?.username);
+
+  useEffect(() => {
+    async function fetchData() {
+      const blob = await convertBlobURL(currentUser?.imgURL);
+      setBlob(blob);
+    }
+
+    fetchData();
+
+    return () => {
+      URL.revokeObjectURL(blob);
+      setBlob(null);
+    };
+  }, []);
   return (
     <div className="userInfo">
       <div className="user">
-        <img src={currentUser?.imgURL || "/default-avatar.jpg"} alt="avatar" />
+        <img src={blob || "/default-avatar.jpg"} alt="avatar" />
         <div className="content">
           <h2>
             {username}

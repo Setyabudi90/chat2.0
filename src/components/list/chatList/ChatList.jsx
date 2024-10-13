@@ -40,7 +40,10 @@ const ChatList = () => {
           const userDocRef = doc(db, "users", item.receiverId);
           const userDocSnap = await getDoc(userDocRef);
           const user = userDocSnap.data();
-          return { ...item, user };
+
+          const blobedURL = await convertBlobURL(user.imgURL);
+
+          return { ...item, user: { ...user, imgURL: blobedURL } };
         });
 
         const results = await Promise.all(promises);

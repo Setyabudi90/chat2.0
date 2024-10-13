@@ -391,7 +391,7 @@ const Chat = () => {
       URL.revokeObjectURL(blob);
       setBlob(null);
     };
-  }, []);
+  }, [user?.imgURL]);
 
   return (
     <div className="chat">
@@ -449,7 +449,7 @@ const Chat = () => {
               {message.audio && (
                 <audio controls controlsList="nodownload" className="ownAudio">
                   <source src={message.audio} type="audio/webm" />
-                  Your browser does not support the video tag.
+                  Your browser does not support the audio tag.
                 </audio>
               )}
               {message.file && (

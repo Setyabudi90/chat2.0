@@ -20,6 +20,14 @@ function App() {
     return () => unSub();
   }, [fetchUserInfo]);
 
+  if (currentUser) {
+    document.head.querySelector(
+      "title"
+    ).innerHTML = `${currentUser?.username} - ChatS`;
+  } else {
+    document.head.querySelector("title").innerHTML = "ChatS - Chatting Apps";
+  }
+
   if (isLoading) return <div className="loading">Loading...</div>;
   return (
     <div className="container">

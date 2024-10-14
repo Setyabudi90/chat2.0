@@ -8,17 +8,19 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 import "./addUser.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getDocs, where } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { db } from "../../../libs/firebase";
 import { useUserStore } from "../../../libs/useStore";
 import { getDoc } from "firebase/firestore";
+import { convertBlobURL } from "../../../utils/covertBlob";
 
 const AddUser = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const { currentUser } = useUserStore();
+  const [blob, setBlob] = useState(null);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -98,6 +100,20 @@ const AddUser = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    async function fetchBlobImage() {
+      const blobed = await convertBlobURL(user?.imgURL);
+      setBlob(blobed);
+    }
+
+    fetchBlobImage();
+
+    return () => {
+      setBlob(null);
+      URL.revokeObjectURL(blob);
+    };
+  }, [user?.imgURL]);
   return (
     <div className="addUser">
       <form onSubmit={handleSearch}>
@@ -109,7 +125,7 @@ const AddUser = () => {
       {user && (
         <div className="user">
           <div className="detail">
-            <img src={user.imgURL || "/default-avatar.jpg"} alt="avatar" />
+            <img src={blob || "/default-avatar.jpg"} alt="avatar" />
             <div className="main">
               <span>{user?.username}</span>
               {user?.isVerified && (

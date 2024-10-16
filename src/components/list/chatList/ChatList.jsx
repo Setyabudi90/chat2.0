@@ -143,7 +143,7 @@ const ChatList = () => {
               src={
                 chat.user.blocked.includes(currentUser.id)
                   ? "/default-avatar.jpg"
-                  : chat.user.imgURL
+                  : chat.user.imgURL && chat.user.imgURL
               }
               alt="avatar"
               style={{ objectFit: "cover" }}

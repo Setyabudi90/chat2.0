@@ -13,7 +13,7 @@ import { auth } from "../../libs/firebase";
 import { getDoc, doc } from "firebase/firestore";
 import { setDoc } from "firebase/firestore";
 import { db } from "../../libs/firebase";
-import Tambahkan from "../../libs/upload";
+import TambahkanAvatar from "../../libs/uploadAvatar";
 
 const Login = () => {
   const [avatar, setAvatar] = useState({
@@ -26,11 +26,26 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const handleAvatar = (e) => {
-    if (e.target.files[0]) {
+    const types = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/bmp",
+    ];
+    const MAX_FILE_SIZE = 10 * 1024 * 1024;
+    const selected = e.target.files[0];
+    if (
+      selected &&
+      selected.size <= MAX_FILE_SIZE &&
+      types.includes(selected.type)
+    ) {
       setAvatar({
         file: e.target.files[0],
         url: URL.createObjectURL(e.target.files[0]),
       });
+    } else {
+      toast.error("File should be a picture or a photo");
     }
   };
 
@@ -61,7 +76,7 @@ const Login = () => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
 
-      const imgURL = await Tambahkan(avatar.file);
+      const imgURL = await TambahkanAvatar(avatar.file, res.user.uid);
 
       await setDoc(doc(db, "users", res.user.uid), {
         username,

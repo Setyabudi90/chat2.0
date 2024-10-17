@@ -23,6 +23,7 @@ import { convertBlobURL } from "../../utils/covertBlob";
 const Chat = () => {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
+  const [isButtonDisbld, setIsButtonDisbld] = useState(false);
   const [chat, setChat] = useState([]);
   const [img, setImg] = useState({
     file: null,
@@ -140,6 +141,12 @@ const Chat = () => {
 
   const handleSend = async () => {
     if (text.trim() === "" && !img.file && !video.file) return;
+
+    setIsButtonDisbld(true);
+
+    setTimeout(() => {
+      setIsButtonDisbld(false);
+    }, 2000);
 
     let imgUrl = null;
     let videoUrl = null;
@@ -349,6 +356,17 @@ const Chat = () => {
         />
       );
     }
+  };
+
+  const KeyDown = (e) => {
+    if (e.key === "Enter" && isButtonDisbld !== true) {
+      setIsButtonDisbld(true);
+      setTimeout(() => {
+        setIsButtonDisbld(false);
+      }, 2000);
+      handleSend();
+    }
+    console.warn("Too many actions");
   };
 
   const handleCapture = async (imageSrc) => {
@@ -642,7 +660,7 @@ const Chat = () => {
               : "Type a Message..."
           }
           value={text}
-          onKeyDown={(e) => e.key === "Enter" && handleSend()}
+          onKeyDown={KeyDown}
           onChange={(e) => setText(e.target.value)}
           disabled={isCurrentUserBlocked || isReceiverBlocked}
         />
@@ -669,7 +687,7 @@ const Chat = () => {
         <button
           className="sendButton"
           onClick={handleSend}
-          disabled={isCurrentUserBlocked || isReceiverBlocked}
+          disabled={isCurrentUserBlocked || isReceiverBlocked || isButtonDisbld}
         >
           Send
         </button>

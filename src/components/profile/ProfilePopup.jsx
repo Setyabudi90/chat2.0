@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../libs/firebase";
 import "./ProfilePopup.css";
-import Tambahkan from "../../libs/upload";
+import TambahkanAvatar from "../../libs/uploadAvatar";
 import { convertBlobURL } from "../../utils/covertBlob";
 import { toast } from "react-toastify";
 
@@ -42,16 +42,30 @@ const ProfilePopup = ({ userId, onClose }) => {
   };
 
   const handleAvatar = async (event) => {
-    if (event.target.files[0]) {
+    const types = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/bmp",
+    ];
+    if (
+      event.target.files[0].size <= 10 * 1024 * 1024 &&
+      types.includes(event.target.files[0].type)
+    ) {
       const file = event.target.files[0];
       const url = URL.createObjectURL(file);
       setAvatarURL({ file, url });
-      const newImgURL = await Tambahkan(file);
+      const newImgURL = await TambahkanAvatar(file, userId);
       const userDoc = doc(db, "users", userId);
       await updateDoc(userDoc, {
         imgURL: newImgURL,
       });
       toast.success("Avatar Updated, You can refresh this page now.");
+    } else {
+      toast.error(
+        "Avatar size should be less than 10MB and should be an image."
+      );
     }
   };
 

@@ -366,7 +366,7 @@ const Chat = () => {
       }, 2000);
       handleSend();
     }
-    console.warn("Too many actions");
+    return;
   };
 
   const handleCapture = async (imageSrc) => {

@@ -37,4 +37,8 @@ Proyek ini adalah aplikasi chat berbasis web yang memungkinkan pengguna untuk be
 
    ```bash
    git clone https://github.com/username/chat-apps-website.git
-   cd chat-apps-website
+   cd chat2.0
+2. **Install Dependency**
+
+  ```bash
+pnpm install

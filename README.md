@@ -2,7 +2,7 @@
   <img src="https://i.ibb.co.com/Sn7b3YN/dashboard-profile-logo-transformed.jpg" alt="Logo" width="150">
 </p>
 
-<h1 align="center">Chat Apps Website</h1>
+<h1 align="center">ChatS - Chatting Apps</h1>
 
 <p align="center">
   <a href="https://twitter.com/#">

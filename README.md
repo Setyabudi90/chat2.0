@@ -1,14 +1,22 @@
 <p align="center">
-  <img src="path_to_your_logo/logo.png" alt="Logo" width="200">
+  <img src="path_to_your_logo/logo.png" alt="Logo" width="150">
 </p>
 
 <h1 align="center">Chat Apps Website</h1>
 
 <p align="center">
-  <a href="https://twitter.com/yourprofile">Twitter</a> •
-  <a href="https://www.linkedin.com/in/yourprofile">LinkedIn</a> •
-  <a href="https://github.com/yourprofile">GitHub</a> •
-  <a href="https://www.instagram.com/yourprofile">Instagram</a>
+  <a href="https://twitter.com/yourprofile">
+    <img src="https://img.icons8.com/color/48/000000/twitter--v1.png" alt="Twitter" width="20" height="20"/>
+  </a>
+  <a href="https://www.linkedin.com/in/yourprofile">
+    <img src="https://img.icons8.com/color/48/000000/linkedin.png" alt="LinkedIn" width="20" height="20"/>
+  </a>
+  <a href="https://github.com/yourprofile">
+    <img src="https://img.icons8.com/ios-filled/50/000000/github.png" alt="GitHub" width="20" height="20"/>
+  </a>
+  <a href="https://www.instagram.com/yourprofile">
+    <img src="https://img.icons8.com/color/48/000000/instagram-new--v1.png" alt="Instagram" width="20" height="20"/>
+  </a>
 </p>
 
 ---
@@ -37,9 +45,4 @@ Proyek ini adalah aplikasi chat berbasis web yang memungkinkan pengguna untuk be
 
    ```bash
    git clone https://github.com/username/chat-apps-website.git
-   cd chat2.0
-2. **Install Dependency**
-
-  ```bash
-  pnpm install
-
+   cd chat-apps-website

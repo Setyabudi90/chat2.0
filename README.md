@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="path_to_your_logo/logo.png" alt="Logo" width="150">
+  <img src="[path_to_your_logo/logo.png](https://i.ibb.co.com/Sn7b3YN/dashboard-profile-logo-transformed.jpg)" alt="Logo" width="150">
 </p>
 
 <h1 align="center">Chat Apps Website</h1>

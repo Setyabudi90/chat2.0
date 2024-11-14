@@ -48,7 +48,7 @@ Proyek ini adalah aplikasi chat berbasis web yang memungkinkan pengguna untuk be
    ```bash
    pnpm install
    
-2. **Env configuration**
+2. **Env variables configuration**
    - Go to **FIREBASE** website make project and copy your apikey in here
      
    ```bash

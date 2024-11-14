@@ -33,16 +33,26 @@ Proyek ini adalah aplikasi chat berbasis web yang memungkinkan pengguna untuk be
 
 ## 🛠️ Teknologi yang Digunakan
 
-- **Frontend**: HTML, CSS, JavaScript, dan [Framework Frontend yang Digunakan, misalnya React atau Vue.js].
-- **Backend**: [Bahasa pemrograman backend, misalnya Node.js dengan Express].
-- **Database**: [Nama database yang digunakan, misalnya MongoDB atau Firebase].
-- **WebSocket**: Digunakan untuk komunikasi real-time antara client dan server.
-- **Autentikasi**: [Teknologi autentikasi, misalnya JWT atau Firebase Authentication] untuk keamanan login pengguna.
+- **Frontend**: React.js.
+- **Backend**: [Node.js].
+- **Database**: [Firebase].
+- **Autentikasi**: [Firebase Auth] untuk keamanan login pengguna.
 
 ## ⚙️ Instalasi dan Konfigurasi
 
 1. **Clone Repository**
 
    ```bash
-   git clone https://github.com/username/chat-apps-website.git
-   cd chat-apps-website
+   git clone https://github.com/Setyabudi90/chat2.0.git
+   cd chat2.0
+   ```
+2. **Install Dependencies**
+
+   ```bash
+   pnpm install
+   
+3. **Run Project**
+
+   ```bash
+   pnpm dev
+   ```

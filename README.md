@@ -11,7 +11,7 @@
   <a href="https://github.com/Setyabudi90">
     <img src="https://img.icons8.com/ios-filled/50/000000/github.png" alt="GitHub" width="50" height="50"/>
   </a>
-  <a href="https://www.instagram.com/@i.setya_b">
+  <a href="https://www.instagram.com/i.setya_b">
     <img src="https://img.icons8.com/color/48/000000/instagram-new--v1.png" alt="Instagram" width="50" height="50"/>
   </a>
 </p>

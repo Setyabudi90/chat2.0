@@ -49,7 +49,8 @@ Proyek ini adalah aplikasi chat berbasis web yang memungkinkan pengguna untuk be
    pnpm install
    
 2. **Env configuration**
-   - Go to firebase website make project and copy your apikey in here
+   - Go to **FIREBASE** website make project and copy your apikey in here
+     
    ```bash
    VITE_FIREBASE_PROJECT_API_KEY=your_apikey
    

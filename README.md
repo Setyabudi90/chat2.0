@@ -26,7 +26,6 @@ Proyek ini adalah aplikasi chat berbasis web yang memungkinkan pengguna untuk be
 - **Pesan Pribadi**: Kirim dan terima pesan langsung secara personal antar pengguna.
 - **Pemberitahuan Pesan**: Mendapatkan notifikasi pesan masuk secara langsung.
 - **Status Online**: Tampilkan status online pengguna lain.
-- **Desain Responsif**: Aplikasi ini dapat diakses dengan baik pada perangkat mobile maupun desktop.
 
 ## 🛠️ Teknologi yang Digunakan
 
@@ -49,11 +48,11 @@ Proyek ini adalah aplikasi chat berbasis web yang memungkinkan pengguna untuk be
    pnpm install
    
 2. **Env variables configuration**
-   - Go to **FIREBASE** website make project and copy your apikey in here
+   - Go to **FIREBASE** website, make project, copy and paste here 
      
    ```bash
    VITE_FIREBASE_PROJECT_API_KEY=your_apikey
-   
+   ```
    
 4. **Run Project**
 

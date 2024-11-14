@@ -41,4 +41,5 @@ Proyek ini adalah aplikasi chat berbasis web yang memungkinkan pengguna untuk be
 2. **Install Dependency**
 
   ```bash
-pnpm install
+  pnpm install
+

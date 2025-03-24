@@ -169,7 +169,7 @@ const Login = () => {
   };
   return (
     <div className={styles.login} name="login">
-      <div className="item">
+      <div className={styles.item}>
         <h2>Sign In To Continue✨</h2>
         <form onSubmit={handleLogin}>
           <input type="email" placeholder="email" name="email" required />
@@ -184,7 +184,7 @@ const Login = () => {
             {loading ? "Loading..." : "Sign In"}
           </button>
         </form>
-        <div className="provider-login">
+        <div className={styles.providerLogin}>
           <button className={styles.google} onClick={LoginWithGoogle}>
             Login With Google
             <img
@@ -204,7 +204,7 @@ const Login = () => {
             />
           </button>
         </div>
-        <button onClick={handleReset} className="forgot-password-btn">
+        <button onClick={handleReset} className={styles.forgotPasswordBtn}>
           Forgot Password? Klik Here...
         </button>
       </div>

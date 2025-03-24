@@ -21,11 +21,9 @@ function App() {
   }, [fetchUserInfo]);
 
   if (currentUser) {
-    document.head.querySelector(
-      "title"
-    ).innerHTML = `${currentUser?.username} - ChatS`;
+    document.title = `${currentUser?.username} - ChatS`;
   } else {
-    document.head.querySelector("title").innerHTML = "ChatS - Chatting Apps";
+    document.title = "ChatS - Chatting Apps";
   }
 
   if (isLoading) return <div className="loading">Loading...</div>;

@@ -73,7 +73,7 @@
     align-items: center;
     gap: 20px;
 
-    .forgot-password-btn {
+    .forgotPasswordBtn {
       background: none;
       outline: none;
       border: none;
@@ -82,7 +82,7 @@
       text-decoration: underline wavy red;
     }
 
-    .provider-login {
+    .providerLogin {
       display: flex;
       flex-direction: column;
       gap: 10px;

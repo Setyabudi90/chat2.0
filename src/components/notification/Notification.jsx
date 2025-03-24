@@ -3,7 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Notification = () => {
   return (
-    <div className="notification">
+    <div>
       <ToastContainer position="top-right" theme="dark" autoClose={3000} />
     </div>
   );

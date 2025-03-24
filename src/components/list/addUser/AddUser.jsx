@@ -7,7 +7,7 @@ import {
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
-import "./addUser.css";
+import styles from "./addUser.module.css";
 import { useState, useEffect } from "react";
 import { getDocs, where } from "firebase/firestore";
 import { toast } from "react-toastify";
@@ -115,7 +115,7 @@ const AddUser = () => {
     };
   }, [user?.imgURL]);
   return (
-    <div className="addUser">
+    <div className={styles.addUser}>
       <form onSubmit={handleSearch}>
         <input type="text" placeholder="Username" name="username" />
         <button type="submit" disabled={loading}>
@@ -123,10 +123,10 @@ const AddUser = () => {
         </button>
       </form>
       {user && (
-        <div className="user">
-          <div className="detail">
+        <div className={styles.user}>
+          <div className={styles.detail}>
             <img src={blob || "/default-avatar.jpg"} alt="avatar" />
-            <div className="main">
+            <div className={styles.main}>
               <span>{user?.username}</span>
               {user?.isVerified && (
                 <img

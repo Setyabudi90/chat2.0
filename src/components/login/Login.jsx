@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./login.css";
+import styles from "./login.module.css";
 import { toast } from "react-toastify";
 import {
   createUserWithEmailAndPassword,
@@ -168,7 +168,7 @@ const Login = () => {
       .catch((error) => toast.error("An error occured", error));
   };
   return (
-    <div className="login" name="login">
+    <div className={styles.login} name="login">
       <div className="item">
         <h2>Sign In To Continue✨</h2>
         <form onSubmit={handleLogin}>
@@ -185,7 +185,7 @@ const Login = () => {
           </button>
         </form>
         <div className="provider-login">
-          <button className="google" onClick={LoginWithGoogle}>
+          <button className={styles.google} onClick={LoginWithGoogle}>
             Login With Google
             <img
               width="30"
@@ -194,7 +194,7 @@ const Login = () => {
               alt="google-logo"
             />
           </button>
-          <button className="github" onClick={LoginWithGithub}>
+          <button className={styles.github} onClick={LoginWithGithub}>
             Login With Github
             <img
               width="30"
@@ -208,10 +208,10 @@ const Login = () => {
           Forgot Password? Klik Here...
         </button>
       </div>
-      <div className="separator"></div>
+      <div className={styles.separator}></div>
       {closed && (
-        <div className="forgot">
-          <button onClick={close} className="close">
+        <div className={styles.forgot}>
+          <button onClick={close} className={styles.close}>
             X
           </button>
           <form id="reset-password-form" onSubmit={sendResetPassword}>
@@ -225,10 +225,10 @@ const Login = () => {
           </form>
         </div>
       )}
-      <div className="item">
+      <div className={styles.item}>
         <h2>Create An Account</h2>
         <form onSubmit={handleRegister} name="register">
-          <div className="profile">
+          <div className={styles.profile}>
             <img src={avatar.url || "/default-avatar.jpg"} alt="avatar" />
             <label htmlFor="file">Choose a Avatar</label>
           </div>

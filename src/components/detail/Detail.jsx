@@ -2,7 +2,7 @@ import { auth, db } from "../../libs/firebase";
 import { useUserStore } from "../../libs/useStore";
 import { arrayRemove, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { chatStore } from "../../libs/chatStore";
-import "./detail.css";
+import styles from "./detail.module.css";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -51,8 +51,8 @@ const Detail = () => {
   }, []);
 
   return (
-    <div className="detail">
-      <div className="user">
+    <div className={styles.detail}>
+      <div className={styles.user}>
         <img src={blob || "/default-avatar.jpg"} alt="avatar" />
         <h2>
           {user?.username}
@@ -67,26 +67,26 @@ const Detail = () => {
         </h2>
         <p>Hey there, I'm using Chats</p>
       </div>
-      <div className="info">
-        <div className="option">
-          <div className="title">
+      <div className={styles.info}>
+        <div className={styles.option}>
+          <div className={styles.title}>
             <span>Chat Settings</span>
             <img src="/arrowUp.png" alt="up" />
           </div>
         </div>
-        <div className="option">
-          <div className="title">
+        <div className={styles.option}>
+          <div className={styles.title}>
             <span>Privacy & Help</span>
             <img src="/arrowUp.png" alt="up" />
           </div>
         </div>
-        <div className="option">
-          <div className="title">
+        <div className={styles.option}>
+          <div className={styles.title}>
             <span>Shared Files</span>
             <img src="/arrowUp.png" alt="up" />
           </div>
         </div>
-        <div className="content">
+        <div className={styles.content}>
           <button onClick={handleBlock}>
             {isCurrentUserBlocked
               ? "You've been blocked"
@@ -94,7 +94,7 @@ const Detail = () => {
               ? "User been Blocked"
               : "Block This User"}
           </button>
-          <button className="logout" onClick={() => auth.signOut()}>
+          <button className={styles.logout} onClick={() => auth.signOut()}>
             Sign Out
           </button>
         </div>

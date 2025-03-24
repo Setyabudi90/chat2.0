@@ -1,13 +1,13 @@
-import ChatList from './chatList/ChatList'
-import './list.css'
-import UserInfo from './userInfo/UserInfo'
+import ChatList from "./chatList/ChatList";
+import styles from "./list.module.css";
+import UserInfo from "./userInfo/UserInfo";
 const List = () => {
-   return (
-    <div className="list">
-        <UserInfo />
-        <ChatList />
+  return (
+    <div className={styles.list}>
+      <UserInfo />
+      <ChatList />
     </div>
-   )
-}
+  );
+};
 
-export default List
+export default List;

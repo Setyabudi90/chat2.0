@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import "./chat.css";
+import styles from "./chat.module.css";
 import EmojiPicker from "emoji-picker-react";
 import {
   arrayUnion,
@@ -412,16 +412,16 @@ const Chat = () => {
   }, [user?.imgURL]);
 
   return (
-    <div className="chat">
-      <div className="top">
-        <div className="user">
+    <div className={styles.chat}>
+      <div className={styles.top}>
+        <div className={styles.user}>
           <img src={blob || "/default-avatar.jpg"} alt="avatar" />
-          <div className="texts">
+          <div className={styles.texts}>
             <h2>
               {user?.username}
               {user?.isVerified && (
                 <img
-                  className="verified"
+                  className={styles.verified}
                   title="verified"
                   src="/verified.png"
                   alt="verified"
@@ -437,35 +437,45 @@ const Chat = () => {
             </p>
           </div>
         </div>
-        <div className="icons">
+        <div className={styles.icons}>
           <img src="/info.png" alt="info" />
         </div>
       </div>
-      <div className="center">
+      <div className={styles.center}>
         {chat?.messages?.map((message, index) => (
           <div
             className={
-              message?.senderId === currentUser.id ? "message own" : "message"
+              message?.senderId === currentUser.id
+                ? `${styles.message} ${styles.own}`
+                : styles.message
             }
             key={index}
           >
-            <div className="texts">
+            <div className={styles.texts}>
               {message.img && (
                 <img
                   src={message.img}
                   srcSet={message.img}
                   alt="img"
-                  className="ownImg"
+                  className={styles.ownImg}
                 />
               )}
               {message.video && (
-                <video controls controlsList="nodownload" className="ownVideo">
+                <video
+                  controls
+                  controlsList="nodownload"
+                  className={styles.ownVideo}
+                >
                   <source src={message.video} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               )}
               {message.audio && (
-                <audio controls controlsList="nodownload" className="ownAudio">
+                <audio
+                  controls
+                  controlsList="nodownload"
+                  className={styles.ownAudio}
+                >
                   <source src={message.audio} type="audio/webm" />
                   Your browser does not support the audio tag.
                 </audio>
@@ -475,22 +485,22 @@ const Chat = () => {
                   <div
                     className={
                       message?.senderId === currentUser.id
-                        ? "file-message own"
-                        : "file-message"
+                        ? `${styles.fileMessage} ${styles.own}`
+                        : styles.fileMessage
                     }
                   >
-                    <div className="file-icon">
+                    <div className={styles.fileIcon}>
                       {getTypeFiles(message.file?.type)}
                     </div>
-                    <div className="file-details">
+                    <div className={styles.fileDetails}>
                       <a
                         href={message.file.url}
                         download={message.file.name}
-                        className="file-name"
+                        className={styles.fileName}
                       >
                         {message.file.name}
                       </a>
-                      <span className="file-size">
+                      <span className={styles.fileSize}>
                         {`FileSize: ${
                           message.file.size >= 1024 * 1000
                             ? (message.file.size / 1048576).toFixed(2) + " MB"
@@ -511,9 +521,9 @@ const Chat = () => {
           </div>
         ))}
         {img.url && (
-          <div className="message own">
-            <div className="texts">
-              <img src={img.url} alt="message" className="ownImg" />
+          <div className={`${styles.message} ${styles.own}`}>
+            <div className={styles.texts}>
+              <img src={img.url} alt="message" className={styles.ownImg} />
               <p>
                 Ini adalah preview, agar dapat terkirim ketiklah sebuah caption
                 dan untuk membatalkan silahkan refresh halaman ini
@@ -522,9 +532,9 @@ const Chat = () => {
           </div>
         )}
         {video.url && (
-          <div className="message own">
-            <div className="texts">
-              <video controls className="ownVideo">
+          <div className={`${styles.message} ${styles.own}`}>
+            <div className={styles.texts}>
+              <video controls className={styles.ownVideo}>
                 <source src={video.url} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
@@ -536,9 +546,9 @@ const Chat = () => {
           </div>
         )}
         {audio.url && (
-          <div className="message own">
-            <div className="texts">
-              <audio controls className="ownAudio">
+          <div className={`${styles.message} ${styles.own}`}>
+            <div className={styles.texts}>
+              <audio controls className={styles.ownAudio}>
                 <source src={audio.url} type="audio/webm" />
                 Your browser does not support the video tag.
               </audio>
@@ -550,19 +560,21 @@ const Chat = () => {
           </div>
         )}
         {files.url && (
-          <div className="message own">
-            <div className="texts">
-              <div className="file-message">
-                <div className="file-icon">{getTypeFiles(files.type)}</div>
-                <div className="file-details">
+          <div className={`${styles.message} ${styles.own}`}>
+            <div className={styles.texts}>
+              <div className={styles.fileMessage}>
+                <div className={styles.fileIcon}>
+                  {getTypeFiles(files.type)}
+                </div>
+                <div className={styles.fileDetails}>
                   <a
                     href={files.url}
                     download={files.name}
-                    className="file-name"
+                    className={styles.fileName}
                   >
                     {files.name}
                   </a>
-                  <span className="file-size">
+                  <span className={styles.fileSize}>
                     Ukuran File: {(files.size / 1024).toFixed(2)} KB
                   </span>
                 </div>
@@ -574,6 +586,7 @@ const Chat = () => {
             </div>
           </div>
         )}
+
         <div ref={endRef}></div>
       </div>
       {isRecording && (
@@ -589,8 +602,8 @@ const Chat = () => {
           isCameraOpen={isCameraOpen}
         />
       )}
-      <div className="bottom">
-        <div className="icons">
+      <div className={styles.bottom}>
+        <div className={styles.icons}>
           <img
             src="/camera.png"
             alt="camera"
@@ -599,17 +612,17 @@ const Chat = () => {
           <img
             width="50"
             height="50"
-            className="plus"
+            className={styles.plus}
             src="https://img.icons8.com/ios-filled/50/FFFFFF/plus.png"
             alt="plus"
             onClick={() => setDropdown(!dropdown)}
           />
           {dropdown && (
-            <div className="card" id="dropdown">
+            <div className={styles.card} id="dropdown">
               <label htmlFor="video">
                 <img
                   src="https://img.icons8.com/glyph-neue/64/FFFFFF/cinema---v1.png"
-                  className="video"
+                  className={styles.video}
                   alt="video"
                 />
                 VIDEO
@@ -664,7 +677,7 @@ const Chat = () => {
           onChange={(e) => setText(e.target.value)}
           disabled={isCurrentUserBlocked || isReceiverBlocked}
         />
-        <div className="emoji">
+        <div className={styles.emoji}>
           <img
             src="/emoji.png"
             alt="emoji"
@@ -674,7 +687,7 @@ const Chat = () => {
               )
             }
           />
-          <div className="picker">
+          <div className={styles.picker}>
             {isCurrentUserBlocked || isReceiverBlocked ? null : (
               <EmojiPicker
                 open={open}
@@ -685,7 +698,7 @@ const Chat = () => {
           </div>
         </div>
         <button
-          className="sendButton"
+          className={styles.sendButton}
           onClick={handleSend}
           disabled={isCurrentUserBlocked || isReceiverBlocked || isButtonDisbld}
         >

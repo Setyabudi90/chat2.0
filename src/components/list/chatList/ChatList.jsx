@@ -1,5 +1,5 @@
 import AddUser from "../addUser/AddUser";
-import "./chatList.css";
+import styles from "./chatList.module.css";
 import React, { useState, useEffect } from "react";
 import { useUserStore } from "../../../libs/useStore";
 import { doc, onSnapshot, getDoc } from "firebase/firestore";
@@ -108,9 +108,9 @@ const ChatList = () => {
   };
 
   return (
-    <div className="chatList">
-      <div className="search">
-        <div className="searchBar">
+    <div className={styles.chatList}>
+      <div className={styles.search}>
+        <div className={styles.searchBar}>
           <img src="/search.png" alt="Pencarian" onClick={handleSearch} />
           <input
             type="text"
@@ -124,14 +124,14 @@ const ChatList = () => {
         <img
           src={mode ? "/minus.png" : "/plus.png"}
           alt="plus-icon"
-          className="add"
+          className={styles.add}
           onClick={() => setAddMode((prevousMode) => !prevousMode)}
         />
       </div>
       {chats?.map((chat) => {
         return (
           <div
-            className="item"
+            className={styles.item}
             key={chat.chatId}
             data-active={chatId === chat.chatId}
             onClick={() => handleSelect(chat)}
@@ -148,12 +148,12 @@ const ChatList = () => {
               alt="avatar"
               style={{ objectFit: "cover" }}
             />
-            <div className="texts">
+            <div className={styles.texts}>
               <span>
                 {validateUsername(chat?.user?.username)}
                 {chat?.user.isVerified && (
                   <img
-                    className="verified"
+                    className={styles.verified}
                     title="verified"
                     src="/verified.png"
                     alt="verified"

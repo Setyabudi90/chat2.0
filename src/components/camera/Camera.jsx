@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import Webcam from "react-webcam";
-import "./camera.css";
+import styles from "./camera.module.css";
 const Camera = ({ onCapture, isCameraOpen, onClose }) => {
   const webcamRef = useRef(null);
   const handleCapture = () => {
@@ -11,16 +11,16 @@ const Camera = ({ onCapture, isCameraOpen, onClose }) => {
   };
 
   return (
-    <div className="camera-container">
+    <div className={styles.container}>
       {isCameraOpen && (
-        <div className="camera">
+        <div className={styles.camera}>
           <Webcam
             audio={false}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
             className="webcam"
           />
-          <div className="buttons">
+          <div className={styles.buttons}>
             <button onClick={handleCapture} className="capture-button">
               Capture
             </button>

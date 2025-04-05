@@ -22,7 +22,6 @@ Proyek ini adalah aplikasi chat berbasis web yang memungkinkan pengguna untuk be
 
 ## ✨ Fitur Utama
 
-- **Obrolan Grup**: Pengguna dapat berkomunikasi dalam grup dengan banyak anggota sekaligus.
 - **Pesan Pribadi**: Kirim dan terima pesan langsung secara personal antar pengguna.
 - **Pemberitahuan Pesan**: Mendapatkan notifikasi pesan masuk secara langsung.
 - **Status Online**: Tampilkan status online pengguna lain.
@@ -49,7 +48,7 @@ Proyek ini adalah aplikasi chat berbasis web yang memungkinkan pengguna untuk be
    
 2. **Env variables configuration**
    
-   ```bash
+   ```env
    VITE_FIREBASE_PROJECT_API_KEY=your_apikey
    ```
    
